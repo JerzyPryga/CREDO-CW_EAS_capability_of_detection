@@ -43,26 +43,27 @@ std::string get_current_dir_macro();			//Function returning path to current dire
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-/* 	This macro is responsible of making histograms,
+/* 	This macro is responsible for making histograms,
 	graphs and saving them.
 
 	The meaning of each starting parameters of macro:
 
+	- ID_criterium - list of particles IDs,
+
 	- sim_dir - path to directory with files containing CORSIKA simulations,
-	- plots_dir - path to directory where all plots are saved,
+	- plots_dir - path to directory where all plots are saved (default = current directory),
 
-	- bg - background level [parts/m^2 s^2] (default = 70),
-	- prc - percent of particles in radius R_prc (default = 95),
-	- Tdet - detector's registration time Tdet [s] (default = pow(10, -7)),
+	- norm_file - name of file for parametrization (default = last file),
 
-	- bins_N_part - number of bins in histogram of number of particles N (default = 40),
-	- bins_R_prc - number of bins in histogram of R_prc (default = 40),
-	- bins_R_rho - number of bins in histogram of R_rho (default = 40).
+	- bins_rho_N_part - number of bins in histograms of number of particles N_part (default = 40),
+	- bins_rho_r - number of bins in histogram of particles density Rho(r) (default = 40),
 
-	- ID_min - minimum ID of wanted particles (defoult 5),
-	- ID_max - maximum ID of wanted particles (defoult 6),
+	- r_number - number of points on axis of distance from cascade center r (default = 10)
+
 	- p_part_min - minimum momenta of wanted particles [GeV] (default 1),
-	- p_part_max - maximum momenta of wanted particles [GeV] (default pow(10, 10) ~ inf).
+	- p_part_max - maximum momenta of wanted particles [GeV] (default pow(10, 10) ~ inf),
+
+	- n_datas - number of simulations (default = 18).
 */
 
 
@@ -71,7 +72,7 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
 
   //-------------------------------------------------------------  
 
-  /*	In this part, previously generated file
+  /*	In this part, previously generated files
 	is read and several parameters are extracted
 	from it.
   */
@@ -142,7 +143,6 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
 
   param_file.close();
 
-
   //-------------------------------------------------------------  
 
   /*	Here distance points for fitting
@@ -154,9 +154,11 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
 
   for(int rp = 0; rp < r_number; rp++) {
 
-    R_fit_lst[rp] = r_fit_temp;
-    r_fit_temp = r_fit_temp * 2;
+    //R_fit_lst[rp] = r_fit_temp;						//Equally distributed for log scale
+    //r_fit_temp = r_fit_temp * 2;
 
+    R_fit_lst[rp] = ((double(rp+1)/double(r_number))) * pow(10, (double(rp+1)/double(r_number)) - 1) * r_prc_max;
+										//Almost equally distributed for log scale (no repetitions in bins for small r_number)
     if(rp == r_number - 1) R_fit_lst[rp] = R_fit_lst[rp] - 100.0;		//Modification preventing from getting out of histogram range
 
   } 
@@ -246,10 +248,6 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
 	in which plots are stored.
   */
 
-  string Rho_avr_r_dir_name = "/Rho_avr(r)";					//Naming directories for histograms
-  string Rho_avr_r_dir = plots_dir;
-  Rho_avr_r_dir.append(Rho_avr_r_dir_name);
-
   string Rho_rN_dir_name = "/Rho_(r,N)_2D";					//Naming directories for histograms
   string Rho_rN_dir = plots_dir;
   Rho_rN_dir.append(Rho_rN_dir_name);
@@ -258,6 +256,10 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
   string Rho_rN_norm_dir = plots_dir;
   Rho_rN_norm_dir.append(Rho_rN_norm_dir_name);
 
+
+  string Rho_avr_r_dir_name = "/Rho_avr(r)";					//Naming directories for graphs
+  string Rho_avr_r_dir = plots_dir;
+  Rho_avr_r_dir.append(Rho_avr_r_dir_name);
 
   string Rho_rE_norm_dir_name = "/Rho_(r,E)_1D_norm";				//Naming directories for graphs
   string Rho_rE_norm_dir = plots_dir;
@@ -380,7 +382,7 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
 
   n_sim_lst[nf] = n_sim;
 
-  cout<< "Number of simulations in the shower: " << n_sim <<endl;		//Printing number of simulations in the file
+  cout<< "Number of simulations in the file: " << n_sim <<endl;			//Printing number of simulations in the file
   cout<< "\n" <<endl;	
 
   //-------------------------------------------------------------
@@ -504,7 +506,7 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
 
   for(int i = 0; i < len0; i++)  {
     if(r_lst_temp[i] != 0) {
-      r_lst[i_mi] = r_lst_temp[i];						//Filling a new array or r
+      r_lst[i_mi] = r_lst_temp[i];						//Filling a new array of r
       i_mi++;
     }
   }
@@ -537,22 +539,27 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
   //-------------------------------------------------------------
 
   /*	In this part of code, Rho(r) histogram
-	over distance r is created.
+	and graph over distance r is created.
   */
+
+  TH1F * h_Rho_avr = new TH1F("h_Rho_avr", " ; ; " , bins_rho_r - 1, 0, r_prc_max);
+  TGraphErrors * g_Rho_avr = new TGraphErrors("Graph");
 
   string title_Rho_avr = " #rho_{avr}(r) distribution for E_{casc} = ";
   title_Rho_avr.append(to_string(E_lst[nf]));
-  //title_rho_avr.append(" GeV ; r [cm] ; #rho [particles/cm^{2}]");
-  title_Rho_avr.append(" TeV ; r [cm] ; #rho_{avr}(r) [particles/cm^{2}]");
+  title_Rho_avr.append(" TeV");
 
   const char* Rho_avr_title = title_Rho_avr.c_str();
 
-  TH1F * h_Rho_avr = new TH1F("h_Rho_avr", Rho_avr_title , bins_rho_r - 1, 0, r_prc_max);
+  g_Rho_avr->SetTitle(Rho_avr_title);
+
+  g_Rho_avr->GetXaxis()->SetTitle(" r [cm] ");
+  g_Rho_avr->GetYaxis()->SetTitle("#rho_{avr}(r) [particles/cm^{2}]");
 
   //-------------------------------------------------------------
 
   /*	Here the histograms of Rho_avr(r) and
-	Rho_avr(r, E) as well as 2D graph are
+	Rho_avr(r, E) as well as 2D and 1D graph are
 	filled and saved.
   */
 
@@ -560,14 +567,24 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
 
     double rho_avr = (1.0/double(n_sim)) * (h_nr_temp->GetBinContent(b)/((2*M_PI)*h_nr_temp->GetBinWidth(b)*h_nr_temp->GetBinCenter(b)));
 										//Calculating average particles density Rho_avr for given r bin
+    double rho_avr_error_y = (1.0/double(n_sim)) * (sqrt(h_nr_temp->GetBinContent(b))/((2*M_PI)*h_nr_temp->GetBinWidth(b)*h_nr_temp->GetBinCenter(b)));
+    double rho_avr_error_x = h_nr_temp->GetBinWidth(b)/2.0;
+
     h_Rho_avr->SetBinContent(b, rho_avr);					//Filling histogram Rho_avr(r) 1D
     h_Rho_rE_2D->SetBinContent(b, nf, rho_avr);					//Filling histogram Rho_avr(r, E) 2D
 
+    g_Rho_avr->SetPoint(b, h_nr_temp->GetBinCenter(b), rho_avr);		//Filling graph Rho_avr(r) 1D 
+    g_Rho_avr->SetPointError(b, rho_avr_error_x, rho_avr_error_y);		//Filling graph errors
+									 
     if(rho_avr > 0.0) {
       if(rho_avr < Rho_rE_min) Rho_rE_min = rho_avr;				//Finding minimum Rho(r, E)
       if(rho_avr > Rho_rE_max) Rho_rE_max = rho_avr;				//Finding maximum Rho(r, E)
     }
+
   }
+
+  g_Rho_avr->SetMinimum(h_Rho_avr->GetBinContent(bins_rho_r - 1));
+  g_Rho_avr->GetXaxis()->SetLimits(1.0, r_prc_max);
 
   TCanvas A("A");
   A.SetLogy();
@@ -578,9 +595,9 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
   path_Rho_avr.append(".root");
 
   const char* Rho_avr_path = path_Rho_avr.c_str();
-
-  h_Rho_avr->SaveAs(Rho_avr_path);						//Saving it in the created directory
-
+  g_Rho_avr->SaveAs(Rho_avr_path);						//Saving it in the created directory
+  g_Rho_avr->Delete();
+  
   //-------------------------------------------------------------
 
   /*	This part of code fills arrays of
@@ -634,6 +651,8 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
     if(n_N_part_counter[bn] > 0.0) N_part_lst[bn] = (sum_n_N_part[bn]/n_N_part_counter[bn]) / f_meanN_part_E->Eval(E_lst[nf]) ;	//Calculating ratio of N_part/N_avr
     N_part_error[bn] = ((N_rN_max_norm - N_rN_min_norm)/bins_rho_N_part)/2.0;							//Evaluating error on x axis (number of particles)
 
+
+
     for(int rn = 0; rn < bins_rho_r; rn++) {					//A loop for histograms - over all bins
 
     long double rho_temp = 0.0;
@@ -651,6 +670,8 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
     h_Rho_rN_2D_norm->SetBinContent(rn, bn, rho_norm);
 
     }
+
+
 
     for(int rf = 0; rf < r_number; rf++) {					//A loop for arrays - over all distances in an R_fit_lst array
 
@@ -738,7 +759,7 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
   //-------------------------------------------------------------
 
   /*	This part creates 1D graphs of Rho_(N_part)/Rho_avr
-	saves it into a .root file and .png file.
+	saves it into a .root file.
   */
 
   TCanvas L("L"); 
@@ -747,16 +768,14 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
 
   for(int rf = 0; rf < r_number; rf++) {					//A loop over all distances r from the R_fit_lst array - Start DISTANCE LOOP
 
-  double Rho_N_lst_temp[bins_rho_N_part], Rho_N_error_temp[bins_rho_N_part];
+  TGraphErrors * g_Rho_rN_1D = new TGraphErrors("Graph");
+  for(int bn = 0; bn < bins_rho_N_part; bn++) {					//Copying density fraction graph
 
-  for(int bn = 0; bn < bins_rho_N_part; bn++) {
-
-    Rho_N_lst_temp[bn] = Rho_N_lst[bn][rf];
-    Rho_N_error_temp[bn] = Rho_N_error[bn][rf];
-
+    if(Rho_N_lst[bn][rf] != 0.0) {
+      g_Rho_rN_1D->SetPoint(bn, N_part_lst[bn], Rho_N_lst[bn][rf]);
+      g_Rho_rN_1D->SetPointError(bn, N_part_error[bn], Rho_N_error[bn][rf]);
+    }
   }
-
-  TGraphErrors * g_Rho_rN_1D = new TGraphErrors(bins_rho_N_part, N_part_lst, Rho_N_lst_temp, N_part_error, Rho_N_error_temp);
 
   string title_Rho_rN_1D = "#rho(N)/#rho_{avr} distribution for r = ";
   title_Rho_rN_1D.append(to_string(R_fit_lst[rf]));

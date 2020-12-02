@@ -49,6 +49,7 @@ std::string get_current_dir_fit_macro();						//Function returning path to curre
 	Its starting parameters are:
 	- plots_dir - path to directory where the plots are stored,
 	- r_number - number of distance points analysed.
+	- n_datas - number of files.
 */
 
 void Rho_rNE_fit_macro(string plots_dir = get_current_dir_fit_macro(), int r_number = 10, int n_datas = 18)	//Start MACRO
@@ -60,8 +61,7 @@ void Rho_rNE_fit_macro(string plots_dir = get_current_dir_fit_macro(), int r_num
 	for different distances r are defined.
   */
 
-  TF1 * f_Rho_rN = new TF1("f_Rho_rN" , " [0]*pow(x, [1]) + [2]");
-  f_Rho_rN->SetParameters(15.5473, 0.91507, 0.0322778);
+  TF1 * f_Rho_rN = new TF1("f_Rho_rN" , " [0]*x + [1]");
 
   //-------------------------------------------------------------
 
@@ -114,14 +114,13 @@ void Rho_rNE_fit_macro(string plots_dir = get_current_dir_fit_macro(), int r_num
 
   if(file_graph.find(".root") > file_graph.size()) continue;			//Checking if its a root file
 
-  double Rho_rN_p0_lst[r_number], Rho_rN_p1_lst[r_number], Rho_rN_p2_lst[r_number];	//Arrays of parameters of all functions
-  int fit_status = 0;
+  double Rho_rN_p0_lst[r_number], Rho_rN_p1_lst[r_number];			//Arrays of parameters of all functions
 
   cout<< "\nOpening file nr " << nr+1 << " : " <<endl;
   cout<< file_graph <<endl;
   
   TFile *file = new TFile(file_graph.c_str(), "READ");				//Opening each file
-  TGraph * g_Rho_rN = (TGraph *) file->Get("Graph");				//Getting a graph from the file
+  TGraphErrors * g_Rho_rN = (TGraphErrors *) file->Get("Graph");		//Getting a graph from the file
 
   //-------------------------------------------------------------
 
@@ -130,18 +129,14 @@ void Rho_rNE_fit_macro(string plots_dir = get_current_dir_fit_macro(), int r_num
 	a N(E)_params.txt file.
   */
 
-    f_Rho_rN->SetParameters(3.54041e-01, 2.81199e+00, -1.90981e-01);
-    if((nr > 0) && (fit_status > 0.0) && (fit_status < 1.0)) f_Rho_rN->SetParameters(Rho_rN_p0_lst[nr-1], Rho_rN_p1_lst[nr-1], Rho_rN_p2_lst[nr-1]);
+    f_Rho_rN->SetParameters(2.0, 0.0);
 
     TFitResultPtr result_Rho_rN = g_Rho_rN->Fit(f_Rho_rN, "S");  
     Rho_rN_p0_lst[nr] = result_Rho_rN->Parameter(0);
     Rho_rN_p1_lst[nr] = result_Rho_rN->Parameter(1);
-    Rho_rN_p2_lst[nr] = result_Rho_rN->Parameter(2);
-    fit_status = result_Rho_rN->Error(0);
 
     param_rN_file << Rho_rN_p0_lst[nr] << " ";
-    param_rN_file << Rho_rN_p1_lst[nr] << " ";
-    param_rN_file << Rho_rN_p2_lst[nr] << "\n";
+    param_rN_file << Rho_rN_p1_lst[nr] << "\n";
 
 
   //-------------------------------------------------------------
@@ -227,20 +222,20 @@ void Rho_rNE_fit_macro(string plots_dir = get_current_dir_fit_macro(), int r_num
   cout<< file_graph <<endl;
   
   TFile * file = new TFile(file_graph.c_str(), "READ");				//Opening each file
-  TGraph * g_Rho_E = (TGraph *) file->Get("Graph");				//Getting a graph from the file
+  TGraphErrors* g_Rho_E = (TGraphErrors *) file->Get("Graph");			//Getting a graph from the file
 
   //-------------------------------------------------------------
 
   /*	In this part the functions are fitted.
   */
 
-    f_Rho_E->SetParameters(2.80690e-04, 9.99054e-01, -9.79221e-05);
-    if(nr > 0) f_Rho_E->SetParameters(Rho_E_p0_lst[nr-1], Rho_E_p1_lst[nr-1], Rho_E_p2_lst[nr-1]);
+    f_Rho_E->SetParameters(3e-04, 1.0, -1e-04);
 
     TFitResultPtr result_Rho_E = g_Rho_E->Fit(f_Rho_E, "S");  
     Rho_E_p0_lst[nr] = result_Rho_E->Parameter(0);
     Rho_E_p1_lst[nr] = result_Rho_E->Parameter(1);
     Rho_E_p2_lst[nr] = result_Rho_E->Parameter(2);
+
     param_rE_file << Rho_E_p0_lst[nr] << " ";
     param_rE_file << Rho_E_p1_lst[nr] << " ";
     param_rE_file << Rho_E_p2_lst[nr] << "\n";
@@ -282,8 +277,7 @@ void Rho_rNE_fit_macro(string plots_dir = get_current_dir_fit_macro(), int r_num
 	is defined.
   */
 
-  TF1 * f_Rho_avr = new TF1("f_Rho_avr" , " [0]*exp([1]*(x + [2])) + [3]*exp([4]*(x + [5]))");
-  int n_params = 6;
+  TF1 * f_Rho_avr = new TF1("f_Rho_avr" , " [0]/(pow((x + [1]), [2])) ");
 
   //-------------------------------------------------------------
 
@@ -292,20 +286,11 @@ void Rho_rNE_fit_macro(string plots_dir = get_current_dir_fit_macro(), int r_num
 
   nf = 0;
 
-  long double** Rho_avr_p_lst = 0;							//Arrays of parameters of all functions		
-  Rho_avr_p_lst = new long double*[n_datas];
-
-  for(int i = 0; i < n_datas; i++) {
-    Rho_avr_p_lst[i] = new long double[n_params];
-
-    for(int j = 0; j < n_params; j++) {
-      Rho_avr_p_lst[i][j] = 0;
-    }
-  }
+  double Rho_avr_p0_lst[r_number], Rho_avr_p1_lst[r_number], Rho_avr_p2_lst[r_number]; //Arrays of parameters of all functions
 
   //-------------------------------------------------------------
 
-  /*	Here the histograms of Rho_avr are
+  /*	Here the graphs of Rho_avr are
 	loaded from the directory in
 	which it were previously saved as .root files.
   */
@@ -320,45 +305,39 @@ void Rho_rNE_fit_macro(string plots_dir = get_current_dir_fit_macro(), int r_num
   cout<< "\nFile name: " <<endl;
   cout<< ent->d_name <<endl;
 
-  string file_hist = plots_dir_Rho_avr;
-  file_hist.append(ent->d_name);						//Adding name of the file into directory path
+  string file_graph = plots_dir_Rho_avr;
+  file_graph.append(ent->d_name);						//Adding name of the file into directory path
 
 
-  if(file_hist.find(".root") > file_hist.size()) continue;			//Checking if its a root file
+  if(file_graph.find(".root") > file_graph.size()) continue;			//Checking if its a root file
 
   cout<< "\nOpening file nr " << nf+1 << " : " <<endl;
-  cout<< file_hist <<endl;
+  cout<< file_graph <<endl;
   
-  TFile * file = new TFile(file_hist.c_str(), "READ");				//Opening each file
-  TH1F * h_Rho_avr = (TH1F *) file->Get("h_Rho_avr");				//Getting a histogram from the file
+  TFile * file = new TFile(file_graph.c_str(), "READ");				//Opening each file
+  TGraphErrors * g_Rho_avr = (TGraphErrors *) file->Get("Graph");		//Getting a graph from the file
+
 
   //-------------------------------------------------------------
 
   /*	In this part the function is fitted.
   */
 
-    f_Rho_avr->SetParameters(3.09561e-07, -6.68758e-05, 9.88480e+03, 7.22502e-10, -8.41600e-06, 7.99379e+04);
-    //if(nf > 0) f_Rho_avr->SetParameters(Rho_avr_p_lst[nf-1][0], Rho_avr_p_lst[nf-1][1], Rho_avr_p_lst[nf-1][2], Rho_avr_p_lst[nf-1][3], Rho_avr_p_lst[nf-1][4], Rho_avr_p_lst[nf-1][5]);
+    f_Rho_avr->SetParameters(0.7*(nf+1)*9e+09, 3.5e+04, 4.0);
 
-    TFitResultPtr result_rho_avr = h_Rho_avr->Fit(f_Rho_avr, "S");  
-    Rho_avr_p_lst[nf][0] = result_rho_avr->Parameter(0);
-    Rho_avr_p_lst[nf][1] = result_rho_avr->Parameter(1);
-    Rho_avr_p_lst[nf][2] = result_rho_avr->Parameter(2);
-    Rho_avr_p_lst[nf][3] = result_rho_avr->Parameter(3);
-    Rho_avr_p_lst[nf][4] = result_rho_avr->Parameter(4);
-    Rho_avr_p_lst[nf][5] = result_rho_avr->Parameter(5);
-    param_avr_file << Rho_avr_p_lst[nf][0] << " ";
-    param_avr_file << Rho_avr_p_lst[nf][1] << " ";
-    param_avr_file << Rho_avr_p_lst[nf][2] << " ";
-    param_avr_file << Rho_avr_p_lst[nf][3] << " ";
-    param_avr_file << Rho_avr_p_lst[nf][4] << " ";
-    param_avr_file << Rho_avr_p_lst[nf][5] << "\n";
+    TFitResultPtr result_rho_avr = g_Rho_avr->Fit(f_Rho_avr, "S");  
+    Rho_avr_p0_lst[nf] = result_rho_avr->Parameter(0);
+    Rho_avr_p1_lst[nf] = result_rho_avr->Parameter(1);
+    Rho_avr_p2_lst[nf] = result_rho_avr->Parameter(2);
+
+    param_avr_file << Rho_avr_p0_lst[nf] << " ";
+    param_avr_file << Rho_avr_p1_lst[nf] << " ";
+    param_avr_file << Rho_avr_p2_lst[nf] << "\n";
 
   //-------------------------------------------------------------
 
   TCanvas F3("F"); 
   F3.SetLogy(); 
-  //F3.SetLogx(); 
 
   string file_name = ent->d_name;
   int size_name = file_name.size();
@@ -371,10 +350,9 @@ void Rho_rNE_fit_macro(string plots_dir = get_current_dir_fit_macro(), int r_num
 
   const char* Rho_avr_fit_path = path_Rho_avr_fit.c_str();
 
-  h_Rho_avr->Draw();
-  f_Rho_avr->Draw("same");
+  g_Rho_avr->Draw("AP");
   F3.SaveAs(Rho_avr_fit_path);
-  h_Rho_avr->Delete();
+  g_Rho_avr->Delete();
 
   nf++;
 

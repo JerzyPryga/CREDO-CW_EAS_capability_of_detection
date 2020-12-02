@@ -1,0 +1,293 @@
+#include <string>
+#include <iostream>
+#include <vector>
+#include <experimental/filesystem>
+#include <dirent.h>
+#include <codecvt>
+#include <chrono>
+#include <limits.h>
+#include <unistd.h>
+#include <bits/stdc++.h> 
+#include <iostream> 
+#include <sys/stat.h> 
+#include <sys/types.h> 
+
+#ifdef WINDOWS
+#include <direct.h>
+#define GetCurrentDir _getcwd
+#else
+#include <unistd.h>
+#define GetCurrentDir getcwd
+#endif
+
+#include "TROOT.h"
+#include "TCanvas.h"
+#include "TF1.h"
+#include "TLatex.h"
+#include "TH1F.h"
+#include "TH2F.h"
+#include "TGraph2D.h"
+#include "TGraphErrors.h"
+#include "TFitResult.h"
+#include "TTree.h"
+#include "TLeaf.h"
+#include "TLeafI.h"
+#include "TFile.h"
+
+using namespace std::chrono;
+using namespace std;
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+std::string get_current_dir_fit_macro();						//Function returning path to current directory
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+/* 	This macro fits functions
+	to graphs created later for later use.
+
+	Its starting parameters are:
+	- plots_dir - path to directory where the plots are stored,
+	- r_number - number of distance points analysed.
+	- n_datas - number of files.
+*/
+
+void Rho_theta_fit_macro(string plots_dir = get_current_dir_fit_macro(), int r_number = 10, int n_datas = 8)	//Start MACRO
+{
+
+  //-------------------------------------------------------------
+
+  /*	In this part the functions of rho(N)/rho_avr(E)
+	for different distances r are defined.
+  */
+
+  TF1 * f_Rho_rtheta = new TF1("f_Rho_rtheta" , " [0]*pow(cos([1]*x), [2]) ");
+
+  //-------------------------------------------------------------
+
+  string plots_dir_Rho_rtheta = plots_dir;
+  plots_dir_Rho_rtheta.append("/Rho_(r,theta)_1D/");
+
+  cout<< plots_dir_Rho_rtheta <<endl;
+
+  int nf = 0;
+  int nr = 0;
+
+  //-------------------------------------------------------------
+
+  /*	Here the graphs of rho(N)/rho_avr(E) are loaded
+	from directories for each energy in which it were
+	previously saved as .root files.
+  */
+
+  ofstream param_rtheta_file("Rho(r, theta)_fit_params.txt");
+
+  DIR *dir;
+  struct dirent *ent;
+
+  if((dir = opendir(plots_dir_Rho_rtheta.c_str())) != NULL) {				
+  while((ent = readdir(dir)) != NULL) {						//A loop over all directories in the directory - Start DIRECTORY LOOP
+
+  string dir_name = plots_dir_Rho_rtheta;
+  dir_name.append(ent->d_name);
+
+  cout<< "\nDirectory or file name nr "<< nf+1 << " : " <<endl;
+  cout<< dir_name <<endl;
+
+  nr = 0;
+
+  //-------------------------------------------------------------
+
+  DIR * dir2;
+  struct dirent * ent2;
+
+  if((dir2 = opendir(dir_name.c_str())) != NULL) {				
+  while((ent2 = readdir(dir2)) != NULL) {					//A loop over all files in the directory - Start FILES LOOP
+  if(opendir(ent2->d_name) == NULL) {
+
+  cout<< "\nFile name: " <<endl;
+  cout<< ent2->d_name <<endl;
+
+  string file_graph = dir_name;
+  file_graph.append("/");
+  file_graph.append(ent2->d_name);						//Adding name of the file into directory path
+
+  if(file_graph.find(".root") > file_graph.size()) continue;			//Checking if its a root file
+
+  double Rho_rtheta_p0_lst[r_number], Rho_rtheta_p1_lst[r_number], Rho_rtheta_p2_lst[r_number];	//Arrays of parameters of all functions
+
+  cout<< "\nOpening file nr " << nr+1 << " : " <<endl;
+  cout<< file_graph <<endl;
+  
+  TFile *file = new TFile(file_graph.c_str(), "READ");				//Opening each file
+  TGraphErrors * g_Rho_rtheta = (TGraphErrors *) file->Get("Graph");		//Getting a graph from the file
+
+  //-------------------------------------------------------------
+
+  /*	In this part the functions are fitted
+	and their parameters are saved into
+	a N(E)_params.txt file.
+  */
+
+    f_Rho_rtheta->SetParameters(1.0, 0.3, 2.0);
+    if(nr > 0) f_Rho_rtheta->SetParameters(Rho_rtheta_p0_lst[nr-1], Rho_rtheta_p1_lst[nr-1], Rho_rtheta_p2_lst[nr-1]);
+
+    TFitResultPtr result_Rho_rtheta = g_Rho_rtheta->Fit(f_Rho_rtheta, "S");  
+    Rho_rtheta_p0_lst[nr] = result_Rho_rtheta->Parameter(0);
+    Rho_rtheta_p1_lst[nr] = result_Rho_rtheta->Parameter(1);
+    Rho_rtheta_p2_lst[nr] = result_Rho_rtheta->Parameter(2);
+
+    param_rtheta_file << Rho_rtheta_p0_lst[nr] << " ";
+    param_rtheta_file << Rho_rtheta_p1_lst[nr] << " ";
+    param_rtheta_file << Rho_rtheta_p2_lst[nr] << "\n";
+
+
+  //-------------------------------------------------------------
+
+    TCanvas F1("F"); 
+    //F1.SetLogy(); 
+
+    string file_name = ent2->d_name;
+    int size_name = file_name.size();
+    file_name.resize(size_name - 5);
+
+    cout<<endl;
+    string path_Rho_rtheta_fit = dir_name;
+    path_Rho_rtheta_fit.append("/");
+    path_Rho_rtheta_fit.append(file_name);
+    path_Rho_rtheta_fit.append("_fit.png");
+
+    const char* Rho_rtheta_fit_path = path_Rho_rtheta_fit.c_str();
+
+    g_Rho_rtheta->Draw("AP");
+    F1.SaveAs(Rho_rtheta_fit_path);
+    g_Rho_rtheta->Delete();
+
+    nr++;
+
+  //-------------------------------------------------------------
+
+  }
+  }
+  }										//End FILES LOOP
+
+  nf++;
+  param_rtheta_file << "\n";
+
+  //-------------------------------------------------------------
+
+  }
+  }										//End DIRECTORIES LOOP
+
+  param_rtheta_file.close();
+
+  //-------------------------------------------------------------
+
+  /*	In this part the function of
+	Npart(theta) is defined.
+  */
+
+  TF1 * f_Npart_theta = new TF1("f_Npart_theta" , " [0]*pow(cos([1]*x), [2]) ");
+
+  //-------------------------------------------------------------
+
+  string plots_dir_Npart_theta = plots_dir;
+  plots_dir_Npart_theta.append("/Rho_(r,theta)_1D/");
+
+  nr = 0;
+
+  double Npart_theta_p0_lst[r_number], Npart_theta_p1_lst[r_number], Npart_theta_p2_lst[r_number]; //Arrays of parameters of all functions
+
+  //-------------------------------------------------------------
+
+  /*	Here the graphs of rho(E)/rho_(E_param) are
+	loaded from the directory in
+	which it were previously saved as .root files.
+  */
+
+  ofstream param_Npart_theta_file("Npart(theta)_fit_params.txt");
+
+  if((dir = opendir(plots_dir_Npart_theta.c_str())) != NULL) {				
+  while((ent = readdir(dir)) != NULL) {						//A loop over all files in directory - Start FILES LOOP
+  if(opendir(ent->d_name) == NULL) {
+
+								
+  cout<< "\nFile name: " <<endl;
+  cout<< ent->d_name <<endl;
+
+  string file_graph = plots_dir_Npart_theta;
+  file_graph.append(ent->d_name);						//Adding name of the file into directory path
+
+
+  if(file_graph.find(".root") > file_graph.size()) continue;			//Checking if its a root file
+
+  cout<< "\nOpening file nr " << nf+1 << " : " <<endl;
+  cout<< file_graph <<endl;
+  
+  TFile * file = new TFile(file_graph.c_str(), "READ");				//Opening each file
+  TGraphErrors* g_Npart_theta = (TGraphErrors *) file->Get("Graph");		//Getting a graph from the file
+
+  //-------------------------------------------------------------
+
+  /*	In this part the functions are fitted.
+  */
+
+    f_Npart_theta->SetParameters(1.0, 0.3, 2.0);
+    if(nr > 0) f_Npart_theta->SetParameters(Npart_theta_p0_lst[nr-1], Npart_theta_p1_lst[nr-1], Npart_theta_p2_lst[nr-1]);
+
+    TFitResultPtr result_Npart_theta = g_Npart_theta->Fit(f_Npart_theta, "S");  
+    Npart_theta_p0_lst[nr] = result_Npart_theta->Parameter(0);
+    Npart_theta_p1_lst[nr] = result_Npart_theta->Parameter(1);
+    Npart_theta_p2_lst[nr] = result_Npart_theta->Parameter(2);
+    param_Npart_theta_file << Npart_theta_p0_lst[nr] << " ";
+    param_Npart_theta_file << Npart_theta_p1_lst[nr] << " ";
+    param_Npart_theta_file << Npart_theta_p2_lst[nr] << "\n";
+
+  //-------------------------------------------------------------
+
+  TCanvas F2("F"); 
+  //F2.SetLogy(); 
+  //F2.SetLogx(); 
+
+  string file_name = ent->d_name;
+  int size_name = file_name.size();
+  file_name.resize(size_name - 5);
+
+  cout<<endl;
+  string path_Npart_theta_fit = plots_dir_Npart_theta;
+  path_Npart_theta_fit.append(file_name);
+  path_Npart_theta_fit.append("_fit.png");
+
+  const char* Npart_theta_fit_path = path_Npart_theta_fit.c_str();
+
+  g_Npart_theta->Draw("AP");
+  F2.SaveAs(Npart_theta_fit_path);
+  g_Npart_theta->Delete();
+
+  nr++;
+
+  //-------------------------------------------------------------
+
+  }
+  }
+  }										//End FILES LOOP
+
+  param_Npart_theta_file.close();
+
+  //-------------------------------------------------------------
+
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~				//End MACRO
+
+/*	Used functions definitions
+*/
+
+std::string get_current_dir_fit_macro() {					//Function returning path to current directory
+
+   char buff[FILENAME_MAX]; 							
+   GetCurrentDir( buff, FILENAME_MAX );
+   std::string current_working_dir(buff);
+   return current_working_dir;
+
+}

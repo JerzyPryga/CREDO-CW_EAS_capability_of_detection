@@ -44,14 +44,16 @@ string get_current_dir_macro();							//Function returning path to current direc
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-/* 	This macro is responsible of making histograms,
+/* 	This macro is responsible for making histograms,
 	graphs and saving them.
 
 
 	The meaning of each starting parameter of the macro:
 
+	- ID_criterium - list of particles IDs,
+
 	- sim_dir - path to directory with files containing CORSIKA simulations,
-	- plots_dir - path to directory where all plots are saved,
+	- plots_dir - path to directory where all plots are saved (default = current directory),
 
 	- bg - background level [parts/m^2 s^2] (default = 70),
 	- prc - percent of particles in radius R_prc (default = 95),
@@ -61,14 +63,12 @@ string get_current_dir_macro();							//Function returning path to current direc
 	- bins_R_prc - number of bins in histogram of R_prc (default = 40),
 	- bins_R_rho - number of bins in histogram of R_rho (default = 40).
 
-	- ID_min - minimum ID of wanted particles (defoult 5),
-	- ID_max - maximum ID of wanted particles (defoult 6),
 	- p_part_min - minimum momenta of wanted particles [GeV] (default 1),
 	- p_part_max - maximum momenta of wanted particles [GeV] (default pow(10, 10) ~ inf).
  
 */
 
-void NR_E_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Analiza/More_simulations", string plots_dir = get_current_dir_macro(), int prc = 95, int bins_N_part = 40, int bins_R_prc = 40, int bins_R_rho = 40, double bg = 70.0, double Tdet = pow(10, -7), double p_part_min = 1.0, double p_part_max = pow(10, 10), int n_datas = 18)
+void NR_E_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Analiza/More_simulations", string plots_dir = get_current_dir_macro(), double bg = 70.0, int prc = 95, double Tdet = pow(10, -7), int bins_N_part = 40, int bins_R_prc = 40, int bins_R_rho = 40, double p_part_min = 1.0, double p_part_max = pow(10, 10), int n_datas = 18)
 {										//Start MACRO
 
   //-------------------------------------------------------------
@@ -245,7 +245,7 @@ void NR_E_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Analiza/
     n_sim++;
   }										//Counting number of simulations in the file		
 
-  cout<< "Number of simulations in the shower: " << n_sim <<endl;		//Printing number of simulations in the file
+  cout<< "Number of simulations in the file: " << n_sim <<endl;			//Printing number of simulations in the file
   cout<< "\n" <<endl;
 
   //-------------------------------------------------------------
