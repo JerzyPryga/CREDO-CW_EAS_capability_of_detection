@@ -39,21 +39,20 @@ using namespace std;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-std::string get_current_dir_fit_macro();						//Function returning path to current directory
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 /* 	This macro fits functions
 	to graphs created later for later use.
 
 	Its starting parameters are:
 	- plots_dir - path to directory where the plots are stored,
 	- r_number - number of distance points analysed.
-	- n_datas - number of files.
 */
 
-void Rho_theta_fit_macro(string plots_dir = get_current_dir_fit_macro(), int r_number = 10, int n_datas = 8)	//Start MACRO
+void Rho_theta_fit_macro(string plots_dir = get_current_dir_name(), int r_number = 10)	//Start MACRO
 {
+
+  //-------------------------------------------------------------
+
+  auto start = high_resolution_clock::now(); 					//Starting counting time of computations
 
   //-------------------------------------------------------------
 
@@ -61,7 +60,7 @@ void Rho_theta_fit_macro(string plots_dir = get_current_dir_fit_macro(), int r_n
 	for different distances r are defined.
   */
 
-  TF1 * f_Rho_rtheta = new TF1("f_Rho_rtheta" , " [0]*pow(cos([1]*x), [2]) ");
+  TF1 * f_Rho_rtheta = new TF1("f_Rho_rtheta" , " [0]*pow(cos([1]*(x + [2])), [3]) ");
 
   //-------------------------------------------------------------
 
@@ -75,12 +74,12 @@ void Rho_theta_fit_macro(string plots_dir = get_current_dir_fit_macro(), int r_n
 
   //-------------------------------------------------------------
 
-  /*	Here the graphs of rho(N)/rho_avr(E) are loaded
+  /*	Here the graphs of Rho(theta)/Rho(0) are loaded
 	from directories for each energy in which it were
 	previously saved as .root files.
   */
 
-  ofstream param_rtheta_file("Rho(r, theta)_fit_params.txt");
+  ofstream param_Rho_theta_file("Rho(r, theta)_fit_params.txt");
 
   DIR *dir;
   struct dirent *ent;
@@ -114,7 +113,7 @@ void Rho_theta_fit_macro(string plots_dir = get_current_dir_fit_macro(), int r_n
 
   if(file_graph.find(".root") > file_graph.size()) continue;			//Checking if its a root file
 
-  double Rho_rtheta_p0_lst[r_number], Rho_rtheta_p1_lst[r_number], Rho_rtheta_p2_lst[r_number];	//Arrays of parameters of all functions
+  double Rho_rtheta_p0_lst[r_number], Rho_rtheta_p1_lst[r_number], Rho_rtheta_p2_lst[r_number], Rho_rtheta_p3_lst[r_number];	//Arrays of parameters of all functions
 
   cout<< "\nOpening file nr " << nr+1 << " : " <<endl;
   cout<< file_graph <<endl;
@@ -126,20 +125,22 @@ void Rho_theta_fit_macro(string plots_dir = get_current_dir_fit_macro(), int r_n
 
   /*	In this part the functions are fitted
 	and their parameters are saved into
-	a N(E)_params.txt file.
+	a Rho(r, theta)_fit_params.txt file.
   */
 
-    f_Rho_rtheta->SetParameters(1.0, 0.3, 2.0);
-    if(nr > 0) f_Rho_rtheta->SetParameters(Rho_rtheta_p0_lst[nr-1], Rho_rtheta_p1_lst[nr-1], Rho_rtheta_p2_lst[nr-1]);
+    f_Rho_rtheta->SetParameters(1.0, 0.1, -0.1, 30.0);
+    //if(nr > 0) f_Rho_rtheta->SetParameters(Rho_rtheta_p0_lst[nr-1], Rho_rtheta_p1_lst[nr-1], Rho_rtheta_p2_lst[nr-1], Rho_rtheta_p3_lst[nr-1]);
 
-    TFitResultPtr result_Rho_rtheta = g_Rho_rtheta->Fit(f_Rho_rtheta, "S");  
+    TFitResultPtr result_Rho_rtheta = g_Rho_rtheta->Fit(f_Rho_rtheta, "SQ");  
     Rho_rtheta_p0_lst[nr] = result_Rho_rtheta->Parameter(0);
     Rho_rtheta_p1_lst[nr] = result_Rho_rtheta->Parameter(1);
     Rho_rtheta_p2_lst[nr] = result_Rho_rtheta->Parameter(2);
+    Rho_rtheta_p3_lst[nr] = result_Rho_rtheta->Parameter(3);
 
-    param_rtheta_file << Rho_rtheta_p0_lst[nr] << " ";
-    param_rtheta_file << Rho_rtheta_p1_lst[nr] << " ";
-    param_rtheta_file << Rho_rtheta_p2_lst[nr] << "\n";
+    param_Rho_theta_file << Rho_rtheta_p0_lst[nr] << " ";
+    param_Rho_theta_file << Rho_rtheta_p1_lst[nr] << " ";
+    param_Rho_theta_file << Rho_rtheta_p2_lst[nr] << " ";
+    param_Rho_theta_file << Rho_rtheta_p3_lst[nr] << "\n";
 
 
   //-------------------------------------------------------------
@@ -172,14 +173,14 @@ void Rho_theta_fit_macro(string plots_dir = get_current_dir_fit_macro(), int r_n
   }										//End FILES LOOP
 
   nf++;
-  param_rtheta_file << "\n";
+  param_Rho_theta_file << "\n";
 
   //-------------------------------------------------------------
 
   }
   }										//End DIRECTORIES LOOP
 
-  param_rtheta_file.close();
+  param_Rho_theta_file.close();
 
   //-------------------------------------------------------------
 
@@ -187,20 +188,20 @@ void Rho_theta_fit_macro(string plots_dir = get_current_dir_fit_macro(), int r_n
 	Npart(theta) is defined.
   */
 
-  TF1 * f_Npart_theta = new TF1("f_Npart_theta" , " [0]*pow(cos([1]*x), [2]) ");
+  TF1 * f_Npart_theta = new TF1("f_Npart_theta" , " [0]*pow(cos([1]*(x + [2])), [3]) ");
 
   //-------------------------------------------------------------
 
   string plots_dir_Npart_theta = plots_dir;
-  plots_dir_Npart_theta.append("/Rho_(r,theta)_1D/");
+  plots_dir_Npart_theta.append("/N_part_(theta)_1D/");
 
   nr = 0;
 
-  double Npart_theta_p0_lst[r_number], Npart_theta_p1_lst[r_number], Npart_theta_p2_lst[r_number]; //Arrays of parameters of all functions
+  double Npart_theta_p0_lst[r_number], Npart_theta_p1_lst[r_number], Npart_theta_p2_lst[r_number], Npart_theta_p3_lst[r_number]; //Arrays of parameters of all functions
 
   //-------------------------------------------------------------
 
-  /*	Here the graphs of rho(E)/rho_(E_param) are
+  /*	Here the graphs of Npart(theta)/Npart(0) are
 	loaded from the directory in
 	which it were previously saved as .root files.
   */
@@ -229,19 +230,24 @@ void Rho_theta_fit_macro(string plots_dir = get_current_dir_fit_macro(), int r_n
 
   //-------------------------------------------------------------
 
-  /*	In this part the functions are fitted.
+  /*	In this part the functions are fitted
+	and their parameters are saved into
+	a Npart(theta)_fit_params.txt file.
   */
 
-    f_Npart_theta->SetParameters(1.0, 0.3, 2.0);
-    if(nr > 0) f_Npart_theta->SetParameters(Npart_theta_p0_lst[nr-1], Npart_theta_p1_lst[nr-1], Npart_theta_p2_lst[nr-1]);
+    f_Npart_theta->SetParameters(1.0, 0.1, -0.1, 30.0);
+    //if(nr > 0) f_Npart_theta->SetParameters(Npart_theta_p0_lst[nr-1], Npart_theta_p1_lst[nr-1], Npart_theta_p2_lst[nr-1], Npart_theta_p3_lst[nr-1]);
 
-    TFitResultPtr result_Npart_theta = g_Npart_theta->Fit(f_Npart_theta, "S");  
+    TFitResultPtr result_Npart_theta = g_Npart_theta->Fit(f_Npart_theta, "SQ");  
     Npart_theta_p0_lst[nr] = result_Npart_theta->Parameter(0);
     Npart_theta_p1_lst[nr] = result_Npart_theta->Parameter(1);
     Npart_theta_p2_lst[nr] = result_Npart_theta->Parameter(2);
+    Npart_theta_p3_lst[nr] = result_Npart_theta->Parameter(3);
+
     param_Npart_theta_file << Npart_theta_p0_lst[nr] << " ";
     param_Npart_theta_file << Npart_theta_p1_lst[nr] << " ";
-    param_Npart_theta_file << Npart_theta_p2_lst[nr] << "\n";
+    param_Npart_theta_file << Npart_theta_p2_lst[nr] << " ";
+    param_Npart_theta_file << Npart_theta_p3_lst[nr] << "\n";
 
   //-------------------------------------------------------------
 
@@ -276,18 +282,15 @@ void Rho_theta_fit_macro(string plots_dir = get_current_dir_fit_macro(), int r_n
 
   //-------------------------------------------------------------
 
+  auto stop = high_resolution_clock::now(); 
+  auto duration = duration_cast<microseconds>(stop - start); 			//Stoping counting time of computations
+
+  cout<<"\n" <<endl;
+  cout<< "Time of the computations: " << duration.count() << " * 10^{-6} s = " <<  duration.count()/pow(10, 6) << " s = "  << duration.count()/(pow(10, 6)*60) << " min" <<endl;
+
+  //-------------------------------------------------------------
+
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~				//End MACRO
 
-/*	Used functions definitions
-*/
-
-std::string get_current_dir_fit_macro() {					//Function returning path to current directory
-
-   char buff[FILENAME_MAX]; 							
-   GetCurrentDir( buff, FILENAME_MAX );
-   std::string current_working_dir(buff);
-   return current_working_dir;
-
-}

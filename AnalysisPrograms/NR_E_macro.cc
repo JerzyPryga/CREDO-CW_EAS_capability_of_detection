@@ -36,14 +36,6 @@
 using namespace std::chrono;
 using namespace std;
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-/* 	Used functions */
-
-string get_current_dir_macro();							//Function returning path to current directory
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 /* 	This macro is responsible for making histograms,
 	graphs and saving them.
 
@@ -68,8 +60,12 @@ string get_current_dir_macro();							//Function returning path to current direc
  
 */
 
-void NR_E_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Analiza/More_simulations", string plots_dir = get_current_dir_macro(), double bg = 70.0, int prc = 95, double Tdet = pow(10, -7), int bins_N_part = 40, int bins_R_prc = 40, int bins_R_rho = 40, double p_part_min = 1.0, double p_part_max = pow(10, 10), int n_datas = 18)
+void NR_E_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Analiza/More_simulations", string plots_dir = get_current_dir_name(), double bg = 70.0, int prc = 95, double Tdet = pow(10, -7), int bins_N_part = 40, int bins_R_prc = 40, int bins_R_rho = 40, double p_part_min = 1.0, double p_part_max = pow(10, 10), int n_datas = 18)
 {										//Start MACRO
+
+  //-------------------------------------------------------------
+
+  auto start = high_resolution_clock::now(); 					//Starting counting time of computations
 
   //-------------------------------------------------------------
 
@@ -439,7 +435,7 @@ void NR_E_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Analiza/
   TCanvas C("C");  
 
   cout<<endl;
-  TFitResultPtr result = h_N_part->Fit("gaus", "S");				//Fitting the Gaussian distribution
+  TFitResultPtr result = h_N_part->Fit("gaus", "SQ");				//Fitting the Gaussian distribution
 
   cN_part_lst[nf] = result->Parameter(0);					//Saving its parameter C
   meanN_part_lst[nf] = result->Parameter(1);					//Saving its parameter Mean
@@ -473,7 +469,7 @@ void NR_E_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Analiza/
 
   const char* R_prc_title = title_R_prc.c_str();
 
-  TH1 * h_R_prc = new TH1F("h_r", R_prc_title, bins_R_prc, 0, 1.1*R_prc_max);
+  TH1 * h_R_prc = new TH1F("h_R_prc", R_prc_title, bins_R_prc, 0, 1.1*R_prc_max);
 
   for(int n = 0; n < n_sim; n++) {
     h_R_prc->Fill(R_prc_temp_lst[n]);						//Filling tha histogram with R_prc
@@ -483,7 +479,7 @@ void NR_E_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Analiza/
   TCanvas B("B");  
 
   cout<<endl;
-  TFitResultPtr resultR_prc = h_R_prc->Fit("gaus", "S");  			//Fitting the Gaussian distribution
+  TFitResultPtr resultR_prc = h_R_prc->Fit("gaus", "SQ");  			//Fitting the Gaussian distribution
 
   cR_prc_lst[nf] = resultR_prc->Parameter(0);					//Saving its parameter C
   meanR_prc_lst[nf] = resultR_prc->Parameter(1);				//Saving its parameter Mean
@@ -527,7 +523,7 @@ void NR_E_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Analiza/
   TCanvas H("H");
 
   cout<<endl;
-  TFitResultPtr resultR_rho = h_R_rho->Fit("gaus", "S");			//Fitting the Gaussian distribution  
+  TFitResultPtr resultR_rho = h_R_rho->Fit("gaus", "SQ");			//Fitting the Gaussian distribution  
 
   cR_rho_lst[nf] = resultR_rho->Parameter(0);					//Saving its parameter C
   meanR_rho_lst[nf] = resultR_rho->Parameter(1);				//Saving its parameter Mean
@@ -845,20 +841,15 @@ void NR_E_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Analiza/
 
   //-------------------------------------------------------------
 
-}										//End MACRO
+  auto stop = high_resolution_clock::now(); 
+  auto duration = duration_cast<microseconds>(stop - start); 			//Stoping counting time of computations
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  cout<<"\n" <<endl;
+  cout<< "Time of the computations: " << duration.count() << " * 10^{-6} s = " <<  duration.count()/pow(10, 6) << " s = "  << duration.count()/(pow(10, 6)*60) << " min" <<endl;
 
-/* Used functions definitions
-*/
+  //-------------------------------------------------------------
 
-string get_current_dir_macro() {						//Function returning path to current directory
-
-   char buff[FILENAME_MAX]; 							//Create string buffer to hold path
-
-   GetCurrentDir( buff, FILENAME_MAX );
-   string current_working_dir(buff);
-
-   return current_working_dir;
 }
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~				//End MACRO
 

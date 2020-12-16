@@ -38,20 +38,18 @@ using namespace std;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-/* 	Used functions */
-
-string get_current_dir_fit_macro();						//Function returning path to current directory
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 /* 	The second macro fits functions
 	to graphs created later for later use.
 
 	Its starting parameter is a path to directory where the plots are stored.
 */
 
-void NR_E_fit_macro(string plots_dir = get_current_dir_fit_macro())				//Start MACRO
+void NR_E_fit_macro(string plots_dir = get_current_dir_name())			//Start MACRO
 {
+
+  //-------------------------------------------------------------
+
+  auto start = high_resolution_clock::now(); 					//Starting counting time of computations
 
   //-------------------------------------------------------------
 
@@ -115,14 +113,14 @@ void NR_E_fit_macro(string plots_dir = get_current_dir_fit_macro())				//Start M
 
   /*	In this part the functions are fitted
 	and their parameters are saved into
-	a N(E)_params.txt file.
+	a N(E)_fit_params.txt file.
   */
 
   //param_file.open("N(E)_params.txt");
 
   if(file_graph.find("cN_part(E)") < file_graph.size()) {
 
-    TFitResultPtr result_N_part_E = g_N_part_E->Fit(f_cN_part_E, "S");  
+    TFitResultPtr result_N_part_E = g_N_part_E->Fit(f_cN_part_E, "SQ");  
     param_file << result_N_part_E->Parameter(0) << "\n";
     param_file << result_N_part_E->Parameter(1) << "\n";
     param_file << result_N_part_E->Parameter(2) << "\n";
@@ -131,7 +129,7 @@ void NR_E_fit_macro(string plots_dir = get_current_dir_fit_macro())				//Start M
 
   if(file_graph.find("sigmaN_part(E)") < file_graph.size()) {
 
-    TFitResultPtr result_N_part_E = g_N_part_E->Fit(f_sigmaN_part_E, "S");  
+    TFitResultPtr result_N_part_E = g_N_part_E->Fit(f_sigmaN_part_E, "SQ");  
     param_file << result_N_part_E->Parameter(0) << "\n";
     param_file << result_N_part_E->Parameter(1) << "\n";
     param_file << result_N_part_E->Parameter(2) << "\n";
@@ -140,7 +138,7 @@ void NR_E_fit_macro(string plots_dir = get_current_dir_fit_macro())				//Start M
 
   if(file_graph.find("meanN_part(E)") < file_graph.size()) {
 
-    TFitResultPtr result_N_part_E = g_N_part_E->Fit(f_meanN_part_E, "S");  
+    TFitResultPtr result_N_part_E = g_N_part_E->Fit(f_meanN_part_E, "SQ");  
     param_file << result_N_part_E->Parameter(0) << "\n";
     param_file << result_N_part_E->Parameter(1) << "\n";
     param_file << result_N_part_E->Parameter(2) << "\n";
@@ -242,19 +240,19 @@ void NR_E_fit_macro(string plots_dir = get_current_dir_fit_macro())				//Start M
 
   if(file_graph.find("cR_prc(E)") < file_graph.size()) {
 
-    TFitResultPtr result_R_prc_E = g_R_prc_E->Fit(f_cR_prc_E, "S");  
+    TFitResultPtr result_R_prc_E = g_R_prc_E->Fit(f_cR_prc_E, "SQ");  
 
   }
 
   if(file_graph.find("sigmaR_prc(E)") < file_graph.size()) {
 
-    TFitResultPtr result_R_prc_E = g_R_prc_E->Fit(f_sigmaR_prc_E, "S");  
+    TFitResultPtr result_R_prc_E = g_R_prc_E->Fit(f_sigmaR_prc_E, "SQ");  
 
   }
 
   if(file_graph.find("meanR_prc(E)") < file_graph.size()) {
 
-    TFitResultPtr result_R_prc_E = g_R_prc_E->Fit(f_meanR_prc_E, "S");  
+    TFitResultPtr result_R_prc_E = g_R_prc_E->Fit(f_meanR_prc_E, "SQ");  
 
   }
 
@@ -344,19 +342,19 @@ void NR_E_fit_macro(string plots_dir = get_current_dir_fit_macro())				//Start M
 
   if(file_graph.find("cR_rho(E)") < file_graph.size()) {
 
-    TFitResultPtr result_R_rho_E = g_R_rho_E->Fit(f_cR_rho_E, "S");  
+    TFitResultPtr result_R_rho_E = g_R_rho_E->Fit(f_cR_rho_E, "SQ");  
 
   }
 
   if(file_graph.find("sigmaR_rho(E)") < file_graph.size()) {
 
-    TFitResultPtr result_R_rho_E = g_R_rho_E->Fit(f_sigmaR_rho_E, "S");  
+    TFitResultPtr result_R_rho_E = g_R_rho_E->Fit(f_sigmaR_rho_E, "SQ");  
 
   }
 
   if(file_graph.find("meanR_rho(E)") < file_graph.size()) {
 
-    TFitResultPtr result_R_rho_E = g_R_rho_E->Fit(f_meanR_rho_E, "S");  
+    TFitResultPtr result_R_rho_E = g_R_rho_E->Fit(f_meanR_rho_E, "SQ");  
 
   }
 
@@ -391,20 +389,15 @@ void NR_E_fit_macro(string plots_dir = get_current_dir_fit_macro())				//Start M
 
   //-------------------------------------------------------------
 
+  auto stop = high_resolution_clock::now(); 
+  auto duration = duration_cast<microseconds>(stop - start); 			//Stoping counting time of computations
+
+  cout<<"\n" <<endl;
+  cout<< "Time of the computations: " << duration.count() << " * 10^{-6} s = " <<  duration.count()/pow(10, 6) << " s = "  << duration.count()/(pow(10, 6)*60) << " min" <<endl;
+
+  //-------------------------------------------------------------
+
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~				//End MACRO
-
-/* Used functions definitions
-*/
-
-string get_current_dir_fit_macro() {						//Function returning path to current directory
-
-   char buff[FILENAME_MAX]; 							//Create string buffer to hold path
-
-   GetCurrentDir( buff, FILENAME_MAX );
-   string current_working_dir(buff);
-
-   return current_working_dir;
-}
 

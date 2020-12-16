@@ -39,10 +39,6 @@ using namespace std;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-std::string get_current_dir_macro();			//Function returning path to current directory
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 /* 	This macro is responsible for making histograms,
 	graphs and saving them.
 
@@ -67,10 +63,14 @@ std::string get_current_dir_macro();			//Function returning path to current dire
 */
 
 
-void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Analiza/More_simulations", string plots_dir = get_current_dir_macro(), string norm_file = "", int bins_rho_N_part = 40, int bins_rho_r = 40, int r_number = 10, double p_part_min = 1.0, double p_part_max = pow(10, 10), int n_datas = 18)
+void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Analiza/More_simulations", string plots_dir = get_current_dir_name(), string norm_file = "", int bins_rho_N_part = 40, int bins_rho_r = 40, int r_number = 10, double p_part_min = 1.0, double p_part_max = pow(10, 10), int n_datas = 18)
 {
 
-  //-------------------------------------------------------------  
+  //-------------------------------------------------------------
+
+  auto start = high_resolution_clock::now(); 					//Starting counting time of computations
+
+  //------------------------------------------------------------- 
 
   /*	In this part, previously generated files
 	is read and several parameters are extracted
@@ -943,18 +943,15 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
 
   //-------------------------------------------------------------
 
+  auto stop = high_resolution_clock::now(); 
+  auto duration = duration_cast<microseconds>(stop - start); 			//Stoping counting time of computations
+
+  cout<<"\n" <<endl;
+  cout<< "Time of the computations: " << duration.count() << " * 10^{-6} s = " <<  duration.count()/pow(10, 6) << " s = "  << duration.count()/(pow(10, 6)*60) << " min" <<endl;
+
+  //-------------------------------------------------------------
+
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~				//End MACRO
 
-/*	Used functions definitions
-*/
-
-std::string get_current_dir_macro() {						//Function returning path to current directory
-
-   char buff[FILENAME_MAX]; 							
-   GetCurrentDir( buff, FILENAME_MAX );
-   std::string current_working_dir(buff);
-   return current_working_dir;
-
-}

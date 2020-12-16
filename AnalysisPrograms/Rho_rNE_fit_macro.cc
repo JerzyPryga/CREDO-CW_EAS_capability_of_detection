@@ -39,21 +39,20 @@ using namespace std;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-std::string get_current_dir_fit_macro();						//Function returning path to current directory
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 /* 	This macro fits functions
 	to graphs created later for later use.
 
 	Its starting parameters are:
 	- plots_dir - path to directory where the plots are stored,
 	- r_number - number of distance points analysed.
-	- n_datas - number of files.
 */
 
-void Rho_rNE_fit_macro(string plots_dir = get_current_dir_fit_macro(), int r_number = 10, int n_datas = 18)	//Start MACRO
+void Rho_rNE_fit_macro(string plots_dir = get_current_dir_name(), int r_number = 10)	//Start MACRO
 {
+
+  //-------------------------------------------------------------
+
+  auto start = high_resolution_clock::now(); 					//Starting counting time of computations
 
   //-------------------------------------------------------------
 
@@ -126,12 +125,12 @@ void Rho_rNE_fit_macro(string plots_dir = get_current_dir_fit_macro(), int r_num
 
   /*	In this part the functions are fitted
 	and their parameters are saved into
-	a N(E)_params.txt file.
+	a Rho(r,N)_fit_params.txt file.
   */
 
-    f_Rho_rN->SetParameters(2.0, 0.0);
+    f_Rho_rN->SetParameters(1.0, 0.0);
 
-    TFitResultPtr result_Rho_rN = g_Rho_rN->Fit(f_Rho_rN, "S");  
+    TFitResultPtr result_Rho_rN = g_Rho_rN->Fit(f_Rho_rN, "SQ");  
     Rho_rN_p0_lst[nr] = result_Rho_rN->Parameter(0);
     Rho_rN_p1_lst[nr] = result_Rho_rN->Parameter(1);
 
@@ -226,12 +225,14 @@ void Rho_rNE_fit_macro(string plots_dir = get_current_dir_fit_macro(), int r_num
 
   //-------------------------------------------------------------
 
-  /*	In this part the functions are fitted.
+  /*	In this part the functions are fitted
+	and their parameters are saved into
+	a Rho(r,E)_fit_params.txt file.
   */
 
     f_Rho_E->SetParameters(3e-04, 1.0, -1e-04);
 
-    TFitResultPtr result_Rho_E = g_Rho_E->Fit(f_Rho_E, "S");  
+    TFitResultPtr result_Rho_E = g_Rho_E->Fit(f_Rho_E, "SQ");  
     Rho_E_p0_lst[nr] = result_Rho_E->Parameter(0);
     Rho_E_p1_lst[nr] = result_Rho_E->Parameter(1);
     Rho_E_p2_lst[nr] = result_Rho_E->Parameter(2);
@@ -320,12 +321,14 @@ void Rho_rNE_fit_macro(string plots_dir = get_current_dir_fit_macro(), int r_num
 
   //-------------------------------------------------------------
 
-  /*	In this part the function is fitted.
+  /*	In this part the functions are fitted
+	and their parameters are saved into
+	a Rho(r)_fit_params.txt file.
   */
 
     f_Rho_avr->SetParameters(0.7*(nf+1)*9e+09, 3.5e+04, 4.0);
 
-    TFitResultPtr result_rho_avr = g_Rho_avr->Fit(f_Rho_avr, "S");  
+    TFitResultPtr result_rho_avr = g_Rho_avr->Fit(f_Rho_avr, "SQ");  
     Rho_avr_p0_lst[nf] = result_rho_avr->Parameter(0);
     Rho_avr_p1_lst[nf] = result_rho_avr->Parameter(1);
     Rho_avr_p2_lst[nf] = result_rho_avr->Parameter(2);
@@ -366,18 +369,15 @@ void Rho_rNE_fit_macro(string plots_dir = get_current_dir_fit_macro(), int r_num
 
   //-------------------------------------------------------------
 
+  auto stop = high_resolution_clock::now(); 
+  auto duration = duration_cast<microseconds>(stop - start); 			//Stoping counting time of computations
+
+  cout<<"\n" <<endl;
+  cout<< "Time of the computations: " << duration.count() << " * 10^{-6} s = " <<  duration.count()/pow(10, 6) << " s = "  << duration.count()/(pow(10, 6)*60) << " min" <<endl;
+
+  //-------------------------------------------------------------
+
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~				//End MACRO
 
-/*	Used functions definitions
-*/
-
-std::string get_current_dir_fit_macro() {					//Function returning path to current directory
-
-   char buff[FILENAME_MAX]; 							
-   GetCurrentDir( buff, FILENAME_MAX );
-   std::string current_working_dir(buff);
-   return current_working_dir;
-
-}

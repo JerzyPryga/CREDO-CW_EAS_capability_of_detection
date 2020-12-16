@@ -39,10 +39,6 @@ using namespace std;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-std::string get_current_dir_macro();			//Function returning path to current directory
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 /* 	This macro is responsible for making histograms,
 	graphs and saving them.
 
@@ -64,9 +60,13 @@ std::string get_current_dir_macro();			//Function returning path to current dire
 	- n_datas - number of simulations (default = 18).
 */
 
-void Rho_theta_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Analiza/Angle_distribution/Simulations", string plots_dir = get_current_dir_macro(), int bins_rho_N_part = 40, int bins_rho_r = 40, int r_number = 10, double p_part_min = 1.0, double p_part_max = pow(10, 10), int n_datas = 8)
+void Rho_theta_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Analiza/Angle_distribution/Simulations", string plots_dir = get_current_dir_name(), int bins_rho_N_part = 50, int bins_rho_r = 40, int r_number = 10, double p_part_min = 1.0, double p_part_max = pow(10, 10), int n_datas = 8, double max_theta = 70.0)
 
 {
+
+  //-------------------------------------------------------------
+
+  auto start = high_resolution_clock::now(); 					//Starting counting time of computations
 
   //-------------------------------------------------------------  
 
@@ -125,7 +125,7 @@ void Rho_theta_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Ana
     //r_fit_temp = r_fit_temp * 2;
 
     R_fit_lst[rp] = ((double(rp+1)/double(r_number))) * pow(10, (double(rp+1)/double(r_number)) - 1) * r_prc_max;
-    cout<< R_fit_lst[rp] <<endl;						//Almost equally distributed for log scale (no repetitions in bins for small r_number)
+    										//Almost equally distributed for log scale (no repetitions in bins for small r_number)
     if(rp == r_number - 1) R_fit_lst[rp] = R_fit_lst[rp] - 100.0;		//Modification preventing from getting out of histogram range
 
   } 
@@ -164,9 +164,6 @@ void Rho_theta_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Ana
     }
   }
 
-  double Rho_rTheta_min = 0.0;
-  double Rho_rTheta_max = 1.0;
-
   //-------------------------------------------------------------
 
   /*	Here are defined some directories
@@ -177,16 +174,23 @@ void Rho_theta_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Ana
   string Rho_theta_dir = plots_dir;
   Rho_theta_dir.append(Rho_theta_dir_name);
 
+  string Npart_theta_dir_name = "/N_part_(theta)_1D";				//Naming directories for histograms
+  string Npart_theta_dir = plots_dir;
+  Npart_theta_dir.append(Npart_theta_dir_name);
+
+
+  int check_Npart_theta = mkdir(Npart_theta_dir.c_str(), 0777);			//Creating directories for histograms
   int check_Rho_theta = mkdir(Rho_theta_dir.c_str(), 0777);			//Creating directories for histograms
 
   //-------------------------------------------------------------  
 
   /*	This part of code defines
-	a 2D histogram of particles density
-	Rho(r, Theta).
+	a 2D histograms of particles density
+	Rho(r, Theta) and its error.
   */
 
-  TH2 * h_Rho_rangle_2D = new TH2F("h_rho_rTheta", " #rho(r, #theta) distribution; r [cm]; File number ; #rho [cm^{-2}] ", bins_rho_r, 0, r_prc_max, n_datas, 0, n_datas);
+  TH2 * h_Rho_rangle_2D = new TH2F("h_rho_rTheta", " #rho(r, #theta) distribution; r [cm]; #theta ; #rho [cm^{-2}] ", bins_rho_r, 0, r_prc_max, n_datas, 0, (2.0*M_PI/360.0)*max_theta);
+  TH2 * h_Rho_rangle_error_2D = new TH2F("h_rho_rTheta_error", " #rho(r, #theta) distribution; r [cm]; #theta ; #rho [cm^{-2}] ", bins_rho_r, 0, r_prc_max, n_datas, 0, (2.0*M_PI/360.0)*max_theta);
 
   //-------------------------------------------------------------
 
@@ -201,6 +205,8 @@ void Rho_theta_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Ana
   if((dir = opendir(sim_dir.c_str())) != NULL) {				
   while((ent = readdir(dir)) != NULL) {						//A loop over all files in directory - Start FILES LOOP
   if(opendir(ent->d_name) == NULL) {
+
+  //-------------------------------------------------------------
 
   /*	This part of code reads each file,
 	finds energy of primary particle for
@@ -254,7 +260,7 @@ void Rho_theta_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Ana
   Theta_lst[nf] = (2.0*M_PI/360.0)*(theta_sim->GetValue(0));			//Filling an array with theta angle
 
   cout<< "\nTheta angle of showers in the file: " << theta_sim->GetValue(0) << " degrees" <<endl;//Printing angle
-  cout<< "\nTheta angle of showers in the file: " << Theta_lst[nf] << " radians" <<endl;	//Printing angle
+  cout<< "Theta angle of showers in the file: " << Theta_lst[nf] << " radians" <<endl;	//Printing angle
 
   sim->GetEntry(0);
   //E_lst[nf] = E_sim->GetValue(0);						//Filling an array with energy in GeV
@@ -293,8 +299,6 @@ void Rho_theta_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Ana
   //-------------------------------------------------------------
 
   for(int n = 0; n < n_sim; n++) {						//A loop over all simulations in the file - Start SIMULATIONS LOOP
-
-  cout<< n << " Theta " << Theta_lst[nf] << " radians" <<endl;			//Printing angle
 
   /*	In this part for each particle in the simulation
 	that fulfil certain criteria
@@ -335,7 +339,7 @@ void Rho_theta_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Ana
       x = l_x->GetValue(i);
       y = l_y->GetValue(i);
 
-      Npart_lst[n]++;
+      Npart_lst[nf]++;
 
       r_lst_temp[N_mi] = sqrt((x*x) + (y*y));					//Filling an array of r
       N_mi++;									//Counting number of particles that filfil given criteria
@@ -368,31 +372,27 @@ void Rho_theta_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Ana
 
   //-------------------------------------------------------------
 
+  /*	Here histograms of particles density
+	and its error are filled.
+  */
 
-  for(int b = 0; b < bins_rho_r; b++) {
+  for(int b = 1; b <= bins_rho_r; b++) {
 
     double rho_avr = (1.0/double(n_sim)) * (h_nr_temp->GetBinContent(b)/((2*M_PI)*h_nr_temp->GetBinWidth(b)*h_nr_temp->GetBinCenter(b)));
 										//Calculating average particles density Rho_avr for given r bin
     double rho_avr_error_y = (1.0/double(n_sim)) * (sqrt(h_nr_temp->GetBinContent(b))/((2*M_PI)*h_nr_temp->GetBinWidth(b)*h_nr_temp->GetBinCenter(b)));
     double rho_avr_error_x = h_nr_temp->GetBinWidth(b)/2.0;
 
-    h_Rho_rangle_2D->SetBinContent(b, nf, rho_avr);				//Filling histogram Rho_avr(r, Theta) 2D
-    h_Rho_rangle_2D->SetBinError(b, nf, rho_avr_error_x, rho_avr_error_y);	//Filling histogram error Rho_avr(r, Theta) 2D
-									 
-    if(rho_avr > 0.0) {
-      if(rho_avr < Rho_rTheta_min) Rho_rTheta_min = rho_avr;			//Finding minimum Rho(r, Theta)
-      if(rho_avr > Rho_rTheta_max) Rho_rTheta_max = rho_avr;			//Finding maximum Rho(r, Theta)
-    }
+    int nt_temp = h_Rho_rangle_2D->GetYaxis()->FindBin(Theta_lst[nf]);		//Finding proper theta = 0 bin in Rho_avr(r,  Theta) histogram
 
+    h_Rho_rangle_2D->SetBinContent(b, nt_temp, rho_avr);			//Filling histogram Rho_avr(r, Theta) 2D
+    h_Rho_rangle_error_2D->SetBinContent(b, nt_temp, rho_avr_error_y);		//Filling histogram error Rho_avr(r, Theta) 2D
+								 
   }										
 
   //-------------------------------------------------------------
 
-  cout<< R_fit_lst[0] <<endl;
-
   }										//End SIMULATIONS LOOP
-
-  cout<< R_fit_lst[0] <<endl;
 
   //-------------------------------------------------------------
 
@@ -417,9 +417,14 @@ void Rho_theta_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Ana
 
   //-------------------------------------------------------------
 
-  TH1 * h_nr_temp2 = new TH1F(" ", " ; ; ", bins_rho_r, 0, r_prc_max);
+  /*	This part of code creates a graph
+	for each distance from the list. The graphs
+	shows Rhop(theta) relationship.
+  */
 
   for(int br = 0; br < r_number; br++) {
+
+    double norm_max = 0.0;							//Maximum density for graph maximum
 
     TGraphErrors * g_Rho_theta = new TGraphErrors("Graph");
 
@@ -435,25 +440,33 @@ void Rho_theta_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Ana
     g_Rho_theta->GetXaxis()->SetTitle(" #theta [^o] ");
     g_Rho_theta->GetYaxis()->SetTitle(" #rho_{avr}(#theta) [particles/cm^{2}] ");
 
-    cout<< R_fit_lst[br] <<endl;
-    //int br_temp = h_nr_temp2->GetXaxis()->FindBin(R_fit_lst[br]);		//Finding proper bin in Rho_avr(r,  Theta) histogram
-    int br_temp = h_Rho_rangle_2D->GetXaxis()->FindBin(R_fit_lst[br]);		//Finding proper bin in Rho_avr(r,  Theta) histogram
-    cout<< R_fit_lst[br] << " ; " << br_temp <<endl;
+    int br_temp = h_Rho_rangle_2D->GetXaxis()->FindBin(R_fit_lst[br]);		//Finding proper r bin in Rho_avr(r,  Theta) histogram
 
     for(int nt = 0; nt < n_datas; nt++) {
 
-      Theta_error[0] = Theta_lst[1]/2.0;	
-      if(nt > 0) Theta_error[nf] = (Theta_lst[nt] - Theta_lst[nt-1])/2.0;				//Filling an array with theta angle error
-      cout<< E_lst[0] << " ; " << Theta_lst[nt] << " ; " << Theta_error[nt] << " ; " << h_Rho_rangle_2D->GetBinContent(br_temp, nt) <<endl;
+      int nt_temp = h_Rho_rangle_2D->GetYaxis()->FindBin(Theta_lst[nt]);	//Finding proper theta bin in Rho_avr(r,  Theta) histogram
+      int nt_param = h_Rho_rangle_2D->GetYaxis()->FindBin(0.0);			//Finding proper theta = 0 bin in Rho_avr(r,  Theta) histogram
 
-      g_Rho_theta->SetPoint(nt, Theta_lst[nt], h_Rho_rangle_2D->GetBinContent(br_temp, nt));		//Filling graph Rho_avr(r) 1D 
-      g_Rho_theta->SetPointError(nt, h_Rho_rangle_2D->GetBinErrorLow(br_temp, nt), Theta_error[nt]);	//Filling graph errors
+      long double rho_norm = (h_Rho_rangle_2D->GetBinContent(br_temp, nt_temp))/(h_Rho_rangle_2D->GetBinContent(br_temp, nt_param));
+      long double error_norm = (h_Rho_rangle_error_2D->GetBinContent(br_temp, nt_temp))/(h_Rho_rangle_2D->GetBinContent(br_temp, nt_temp));
+
+      long double theta_err_temp = 1.0;
+      for(int ner = 0; ner < n_datas; ner++) {					//Finding smallest error
+        if((abs(Theta_lst[nt] - Theta_lst[ner]) < theta_err_temp) && (ner != nt)) theta_err_temp = abs(Theta_lst[nt] - Theta_lst[ner]);
+      }
+
+      Theta_error[nt] = theta_err_temp/2.0;					//Filling an array with theta angle error
+     
+      if(rho_norm > norm_max) norm_max = rho_norm;				//Finding maximum particles density
+
+      g_Rho_theta->SetPoint(nt, Theta_lst[nt], rho_norm);			//Filling graph Rho_avr(r) 1D 
+      g_Rho_theta->SetPointError(nt, Theta_error[nt], error_norm);		//Filling graph errors
   
     }
 
-    g_Rho_theta->SetMinimum(h_Rho_rangle_2D->GetBinContent(br_temp, n_datas));
-    g_Rho_theta->SetMaximum(h_Rho_rangle_2D->GetBinContent(br_temp, 1));
-    g_Rho_theta->GetXaxis()->SetLimits(0.0, M_PI/2.0);
+    g_Rho_theta->SetMinimum(0.0);
+    g_Rho_theta->SetMaximum(1.1*norm_max);
+    g_Rho_theta->GetXaxis()->SetLimits(-0.1, M_PI/2.0);
 
     TCanvas A("A");
     //A.SetLogy();
@@ -461,23 +474,18 @@ void Rho_theta_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Ana
     string path_Rho_theta = Rho_theta_dirE;
     path_Rho_theta.append("/Rho_avr(theta)_");
     path_Rho_theta.append(to_string(R_fit_lst[br]));
-    path_Rho_theta.append(".png");
+    path_Rho_theta.append(".root");
 
     const char* Rho_theta_path = path_Rho_theta.c_str();
-    //g_Rho_theta->SaveAs(Rho_theta_path);					//Saving it in the created directory
-
-    g_Rho_theta->Draw("AP");
-    A.SaveAs(Rho_theta_path);
-    g_Rho_theta->Delete();
+    g_Rho_theta->SaveAs(Rho_theta_path);					//Saving it in the created directory
 
   }
-
-  h_nr_temp2->Delete();
 
   //-------------------------------------------------------------
 
   /*	Here 1D graph of number
-	of parts N_part(Theta) is created.
+	of parts N_part(Theta) is created and
+	filled.
   */
 
   TGraphErrors * g_Npart_theta = new TGraphErrors("Graph");
@@ -487,47 +495,46 @@ void Rho_theta_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Ana
   g_Npart_theta->GetXaxis()->SetTitle("#theta [^o]");
   g_Npart_theta->GetYaxis()->SetTitle("#LT N_{part} #GT");
 
+  double Nnorm_max = 0.0;							//Maximum Npart for graph maximum
+
   for(int nt = 0; nt < n_datas; nt++) {
 
-    cout<< Theta_lst[nt] << " ; " << Theta_error[nt] << " ; " << " ; "<< Npart_lst[nt] <<endl;
+    g_Npart_theta->SetPoint(nt, Theta_lst[nt], Npart_lst[nt]/Npart_lst[1]);			//Filling graph Rho_avr(r) 1D 
+    g_Npart_theta->SetPointError(nt, Theta_error[nt], sqrt(Npart_lst[nt])/Npart_lst[1]);	//Filling graph errors
 
-    g_Npart_theta->SetPoint(nt, Theta_lst[nt], Npart_lst[nt]);			//Filling graph Rho_avr(r) 1D 
-    g_Npart_theta->SetPointError(nt, sqrt(Theta_lst[nt]), Theta_error[nt]);	//Filling graph errors
+    if(Npart_lst[nt] > Nnorm_max) Nnorm_max = Npart_lst[nt];					//Finding maximum N_part
   
   }
 
-  //g_Npart_theta->SetMinimum(Npart_lst[0]);
-  //g_Npart_theta->SetMaximum(Npart_lst[n_datas - 1]);
-  g_Npart_theta->GetXaxis()->SetLimits(0.0, M_PI/2.0);
+  int nt_temp = h_Rho_rangle_2D->GetYaxis()->FindBin(0.0);			//Finding proper theta bin in Rho_avr(r,  Theta) histogram
+
+  g_Npart_theta->SetMinimum(0.0);
+  g_Npart_theta->SetMaximum(1.1*Nnorm_max/Npart_lst[nt_temp]);
+  g_Npart_theta->GetXaxis()->SetLimits(-0.1, M_PI/2.0);
 
   TCanvas B("B");
   //A.SetLogy();
 
-  string path_Npart_theta = Rho_theta_dir;
+  string path_Npart_theta = Npart_theta_dir;
   path_Npart_theta.append("/Npart_(theta)_");
-  path_Npart_theta.append(to_string(E_lst[nf]));
+  path_Npart_theta.append(to_string(E_lst[0]));
   path_Npart_theta.append(".png");
-  //path_Npart_theta.append(".root");
+  path_Npart_theta.append(".root");
 
   const char* Npart_theta_path = path_Npart_theta.c_str();
-  //g_Rho_theta->SaveAs(Rho_theta_path);					//Saving it in the created directory
+  g_Npart_theta->SaveAs(Npart_theta_path);					//Saving it in the created directory
 
-  g_Npart_theta->Draw("AP");
-  B.SaveAs(Npart_theta_path);
-  g_Npart_theta->Delete();
+  //-------------------------------------------------------------
+
+  auto stop = high_resolution_clock::now(); 
+  auto duration = duration_cast<microseconds>(stop - start); 			//Stoping counting time of computations
+
+  cout<<"\n" <<endl;
+  cout<< "Time of the computations: " << duration.count() << " * 10^{-6} s = " <<  duration.count()/pow(10, 6) << " s = "  << duration.count()/(pow(10, 6)*60) << " min" <<endl;
+
+  //-------------------------------------------------------------
 
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~				//End MACRO
 
-/*	Used functions definitions
-*/
-
-std::string get_current_dir_macro() {						//Function returning path to current directory
-
-   char buff[FILENAME_MAX]; 							
-   GetCurrentDir( buff, FILENAME_MAX );
-   std::string current_working_dir(buff);
-   return current_working_dir;
-
-}
