@@ -84,7 +84,8 @@ void NR_E_fit_macro(string plots_dir = get_current_dir_name())			//Start MACRO
 	as .root files.
   */
 
-  ofstream param_file ("N(E)_fit_params.txt");
+  ofstream param_file_mN ("meanN(E)_fit_params.txt");				//Creating .txt file to save parameters
+  ofstream param_file_sN ("sigmaN(E)_fit_params.txt");				//Creating .txt file to save parameters
 
   DIR *dir;
   struct dirent *ent;
@@ -121,27 +122,24 @@ void NR_E_fit_macro(string plots_dir = get_current_dir_name())			//Start MACRO
   if(file_graph.find("cN_part(E)") < file_graph.size()) {
 
     TFitResultPtr result_N_part_E = g_N_part_E->Fit(f_cN_part_E, "SQ");  
-    param_file << result_N_part_E->Parameter(0) << "\n";
-    param_file << result_N_part_E->Parameter(1) << "\n";
-    param_file << result_N_part_E->Parameter(2) << "\n";
 
   }
 
   if(file_graph.find("sigmaN_part(E)") < file_graph.size()) {
 
     TFitResultPtr result_N_part_E = g_N_part_E->Fit(f_sigmaN_part_E, "SQ");  
-    param_file << result_N_part_E->Parameter(0) << "\n";
-    param_file << result_N_part_E->Parameter(1) << "\n";
-    param_file << result_N_part_E->Parameter(2) << "\n";
+    param_file_sN << result_N_part_E->Parameter(0) << "\n";
+    param_file_sN << result_N_part_E->Parameter(1) << "\n";
+    param_file_sN << result_N_part_E->Parameter(2) << "\n";
 
   }
 
   if(file_graph.find("meanN_part(E)") < file_graph.size()) {
 
     TFitResultPtr result_N_part_E = g_N_part_E->Fit(f_meanN_part_E, "SQ");  
-    param_file << result_N_part_E->Parameter(0) << "\n";
-    param_file << result_N_part_E->Parameter(1) << "\n";
-    param_file << result_N_part_E->Parameter(2) << "\n";
+    param_file_mN << result_N_part_E->Parameter(0) << "\n";
+    param_file_mN << result_N_part_E->Parameter(1) << "\n";
+    param_file_mN << result_N_part_E->Parameter(2) << "\n";
 
   }
 
@@ -180,7 +178,8 @@ void NR_E_fit_macro(string plots_dir = get_current_dir_name())			//Start MACRO
   }
   }										//End FILES LOOP
 
-  param_file.close();
+  param_file_mN.close();							//Close .txt file
+  param_file_sN.close();							//Close .txt file
 
   //-------------------------------------------------------------
 
@@ -211,6 +210,8 @@ void NR_E_fit_macro(string plots_dir = get_current_dir_name())			//Start MACRO
 	cR_prc(E) are loaded from the directory in
 	which it were previously saved as .root files.
   */
+
+  ofstream Rparam_file ("R_prc(E)_fit_params.txt");				//Creating .txt file to save parameters
 
   if((dir = opendir(plots_dir_R_prc.c_str())) != NULL) {				
   while((ent = readdir(dir)) != NULL) {						//A loop over all files in directory - Start FILES LOOP
@@ -253,6 +254,9 @@ void NR_E_fit_macro(string plots_dir = get_current_dir_name())			//Start MACRO
   if(file_graph.find("meanR_prc(E)") < file_graph.size()) {
 
     TFitResultPtr result_R_prc_E = g_R_prc_E->Fit(f_meanR_prc_E, "SQ");  
+    Rparam_file << result_R_prc_E->Parameter(0) << "\n";
+    Rparam_file << result_R_prc_E->Parameter(1) << "\n";
+    Rparam_file << result_R_prc_E->Parameter(2) << "\n";
 
   }
 
@@ -285,6 +289,8 @@ void NR_E_fit_macro(string plots_dir = get_current_dir_name())			//Start MACRO
   }
   }										//End FILES LOOP
 
+  Rparam_file.close();								//Close .txt file
+
   //-------------------------------------------------------------
 
   /*	In this part the functions of meanR_rho(E),
@@ -313,6 +319,8 @@ void NR_E_fit_macro(string plots_dir = get_current_dir_name())			//Start MACRO
 	cR_rho(E) are loaded from the directory in
 	which it were previously saved as .root files.
   */
+
+  ofstream R2param_file ("R_rho(E)_fit_params.txt");				//Creating .txt file to save parameters
 
   if((dir = opendir(plots_dir_R_rho.c_str())) != NULL) {				
   while((ent = readdir(dir)) != NULL) {						//A loop over all files in directory - Start FILES LOOP
@@ -355,6 +363,9 @@ void NR_E_fit_macro(string plots_dir = get_current_dir_name())			//Start MACRO
   if(file_graph.find("meanR_rho(E)") < file_graph.size()) {
 
     TFitResultPtr result_R_rho_E = g_R_rho_E->Fit(f_meanR_rho_E, "SQ");  
+    R2param_file << result_R_rho_E->Parameter(0) << "\n";
+    R2param_file << result_R_rho_E->Parameter(1) << "\n";
+    R2param_file << result_R_rho_E->Parameter(2) << "\n";
 
   }
 
@@ -386,6 +397,8 @@ void NR_E_fit_macro(string plots_dir = get_current_dir_name())			//Start MACRO
   }
   }
   }										//End FILES LOOP
+
+  R2param_file.close();								//Close .txt file
 
   //-------------------------------------------------------------
 

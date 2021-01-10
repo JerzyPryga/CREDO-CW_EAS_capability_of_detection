@@ -28,6 +28,7 @@
 #include "TH2F.h"
 #include "TGraph2D.h"
 #include "TGraphErrors.h"
+#include "TMultiGraph.h"
 #include "TFitResult.h"
 #include "TTree.h"
 #include "TLeaf.h"
@@ -71,6 +72,29 @@ void Rho_theta_fit_macro(string plots_dir = get_current_dir_name(), int r_number
 
   int nf = 0;
   int nr = 0;
+
+  //-------------------------------------------------------------
+
+  /*	Here the graph of all distances together
+	is created.
+  */
+
+  TMultiGraph* g_All_theta = new TMultiGraph();
+
+  g_All_theta->SetTitle(" #rho(#theta)/#rho(0) | N_{part}(#theta)/N_{part}(0) distribution for all distances ");
+  g_All_theta->GetXaxis()->SetTitle(" #theta [^o] ");
+  g_All_theta->GetYaxis()->SetTitle(" #rho_{avr}(#theta)/#rho_{avr}(0) | N_{part}(#theta)/N_{part}(0) ");
+
+
+  string plots_dir_Npart_theta = plots_dir;
+  plots_dir_Npart_theta.append("/N_part_(theta)_1D/");
+
+  string path_All_theta_fit = plots_dir_Npart_theta;
+  path_All_theta_fit.append("/All_theta_fit.png");
+
+  const char* All_theta_fit_path = path_All_theta_fit.c_str();
+
+  int color = 2;
 
   //-------------------------------------------------------------
 
@@ -120,6 +144,7 @@ void Rho_theta_fit_macro(string plots_dir = get_current_dir_name(), int r_number
   
   TFile *file = new TFile(file_graph.c_str(), "READ");				//Opening each file
   TGraphErrors * g_Rho_rtheta = (TGraphErrors *) file->Get("Graph");		//Getting a graph from the file
+  TGraphErrors * g_Rho_rtheta_temp = (TGraphErrors *) file->Get("Graph");	//Making temporary graphs
 
   //-------------------------------------------------------------
 
@@ -137,15 +162,36 @@ void Rho_theta_fit_macro(string plots_dir = get_current_dir_name(), int r_number
     Rho_rtheta_p2_lst[nr] = result_Rho_rtheta->Parameter(2);
     Rho_rtheta_p3_lst[nr] = result_Rho_rtheta->Parameter(3);
 
-    param_Rho_theta_file << Rho_rtheta_p0_lst[nr] << " ";
-    param_Rho_theta_file << Rho_rtheta_p1_lst[nr] << " ";
-    param_Rho_theta_file << Rho_rtheta_p2_lst[nr] << " ";
-    param_Rho_theta_file << Rho_rtheta_p3_lst[nr] << "\n";
+    param_Rho_theta_file << Rho_rtheta_p0_lst[nr] << "\n";
+    param_Rho_theta_file << Rho_rtheta_p1_lst[nr] << "\n";
+    param_Rho_theta_file << Rho_rtheta_p2_lst[nr] << "\n";
+    param_Rho_theta_file << Rho_rtheta_p3_lst[nr] << "\n \n";
 
 
   //-------------------------------------------------------------
 
-    TCanvas F1("F"); 
+  /*	Adding average to the multigraph.
+  */
+    
+    TCanvas F0("F0");
+
+    g_All_theta->SetMinimum(0.0);
+    g_All_theta->SetMaximum(2.0);
+    g_All_theta->GetXaxis()->SetLimits(-0.1, M_PI/2.0);
+
+    g_Rho_rtheta_temp->SetMarkerStyle(8);
+    g_Rho_rtheta_temp->SetMarkerSize(1);
+    g_Rho_rtheta_temp->SetMarkerColor(color);
+    g_Rho_rtheta_temp->SetLineColor(color);
+    color++;
+
+    g_All_theta->Add(g_Rho_rtheta_temp);
+    g_All_theta->Draw("AP");
+    F0.SaveAs(All_theta_fit_path);
+    
+  //-------------------------------------------------------------
+
+    TCanvas F1("F1"); 
     //F1.SetLogy(); 
 
     string file_name = ent2->d_name;
@@ -191,9 +237,6 @@ void Rho_theta_fit_macro(string plots_dir = get_current_dir_name(), int r_number
   TF1 * f_Npart_theta = new TF1("f_Npart_theta" , " [0]*pow(cos([1]*(x + [2])), [3]) ");
 
   //-------------------------------------------------------------
-
-  string plots_dir_Npart_theta = plots_dir;
-  plots_dir_Npart_theta.append("/N_part_(theta)_1D/");
 
   nr = 0;
 
@@ -244,11 +287,19 @@ void Rho_theta_fit_macro(string plots_dir = get_current_dir_name(), int r_number
     Npart_theta_p2_lst[nr] = result_Npart_theta->Parameter(2);
     Npart_theta_p3_lst[nr] = result_Npart_theta->Parameter(3);
 
-    param_Npart_theta_file << Npart_theta_p0_lst[nr] << " ";
-    param_Npart_theta_file << Npart_theta_p1_lst[nr] << " ";
-    param_Npart_theta_file << Npart_theta_p2_lst[nr] << " ";
+    param_Npart_theta_file << Npart_theta_p0_lst[nr] << "\n";
+    param_Npart_theta_file << Npart_theta_p1_lst[nr] << "\n";
+    param_Npart_theta_file << Npart_theta_p2_lst[nr] << "\n";
     param_Npart_theta_file << Npart_theta_p3_lst[nr] << "\n";
 
+  //-------------------------------------------------------------
+
+  TCanvas F0("F0");
+
+  g_All_theta->Add(g_Npart_theta);
+  g_All_theta->Draw("AP");
+  F0.SaveAs(All_theta_fit_path);
+    
   //-------------------------------------------------------------
 
   TCanvas F2("F"); 

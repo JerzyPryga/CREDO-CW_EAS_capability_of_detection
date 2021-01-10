@@ -58,7 +58,7 @@ int main() {									//Start PROGRAM
 /* 	Here the starting parameters for the program
 	are inputed.
 
-	The meaning of each starting parameters of macro:
+	The meaning of each starting parameters of all macros:
 
 	- ID_criterium - list of particles IDs,
 

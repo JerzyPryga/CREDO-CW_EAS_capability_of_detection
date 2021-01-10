@@ -84,8 +84,8 @@ void NR_E_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Analiza/
   double R_rho_maximum = 0;							//Maximum R_rho - global
   int N_part_maximum = 0;							//Maximum N_part - global
 
-  int id_len = sizeof(ID_criterium)/sizeof(ID_criterium[0]);			//Length of IDs array
-  
+  //int id_len = sizeof(ID_criterium)/sizeof(ID_criterium[0]);			//Length of IDs array
+  int id_len = 12;								//Length of IDs array
 
   //-------------------------------------------------------------
 
@@ -300,8 +300,9 @@ void NR_E_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Analiza/
 
     for(int id = 0; id < id_len; id++) {
       if(ID == ID_criterium[id]) is_ID = 1;
+      //cout<< ID << " : " << ID_criterium[id] << " : " << is_ID <<endl;
     }
-    
+
     if((p_mi >= p_part_min) && (p_mi <= p_part_max) && (is_ID != 0)) {		//Checking the criteria 
 									
       x = l_x->GetValue(i);

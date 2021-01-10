@@ -41,9 +41,8 @@ using namespace std;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-/*	The main C++ program is here and
-	it just reads parameters from user
-	and executes previously written macros.
+/*	Macro with all inputs included which
+	executes previously written macros.
 */
 
 void MacroNRe(string current_dir) {						//Start PROGRAM
@@ -83,12 +82,12 @@ void MacroNRe(string current_dir) {						//Start PROGRAM
   string plots_dir = current_dir;
 
   int prc, bins_N_part, bins_R_prc, bins_R_rho;
-  int ID_criterium[9] = {5, 6, 0, 0, 0 ,0 ,0 ,0, 0};
+  int ID_criterium[12] = {5, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   double bg, Tdet, p_part_min, p_part_max;
 
-  string input;
+  int id_len = 12;
 
-  int id_len = sizeof(ID_criterium)/sizeof(ID_criterium[0]);
+  string input;
 
   bg = 70.0;
   prc = 95;
@@ -98,7 +97,7 @@ void MacroNRe(string current_dir) {						//Start PROGRAM
   bins_R_prc = 40;
   bins_R_rho = 40;
 
-  p_part_min = 1.0;
+  p_part_min = 0.3;
   p_part_max = pow(10, 10);
 
 
@@ -197,17 +196,18 @@ void MacroNRe(string current_dir) {						//Start PROGRAM
   cout<< "1 - Photon gamma" <<endl;
   cout<< "2 - Positon e+" <<endl;
   cout<< "3 - Electron e-" <<endl;
-
-  cout<< "\n5 - Muon mi+" <<endl;
+  cout<< "5 - Muon mi+" <<endl;
   cout<< "6 - Muon mi-" <<endl;
   cout<< "7 - Pi meson pi0 " <<endl;
   cout<< "8 - Pi meson pi+" <<endl;
   cout<< "9 - Pi meson pi-" <<endl;
+  cout<< "13 - neutron n" <<endl;
+  cout<< "14 - proton p" <<endl;
 
   cout<< "\nWhole list of particles IDs can be found on: " <<endl;
   cout<< "https://web.ikp.kit.edu/corsika/usersguide/usersguide.pdf" <<endl;
 
-  cout<< "\nINPUT: minimum IDs of particles of the shower (default " << ID_criterium[0] << " & " << ID_criterium[1] << ") : " <<endl;		//Inputing ID array
+  cout<< "\nINPUT: minimum IDs of particles of the shower (default " << ID_criterium[0] << " - " << ID_criterium[1] << ") : " <<endl;		//Inputing ID array
 
   int id_iter = 0;
 

@@ -195,7 +195,8 @@ void Rho_theta_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Ana
   //-------------------------------------------------------------
 
   int nf = 0;									//Files iterator
-  int id_len = sizeof(ID_criterium)/sizeof(ID_criterium[0]);
+  //int id_len = sizeof(ID_criterium)/sizeof(ID_criterium[0]);			//Length of IDs array
+  int id_len = 12;								//Length of IDs array
 
   //-------------------------------------------------------------
 
@@ -447,8 +448,12 @@ void Rho_theta_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Ana
       int nt_temp = h_Rho_rangle_2D->GetYaxis()->FindBin(Theta_lst[nt]);	//Finding proper theta bin in Rho_avr(r,  Theta) histogram
       int nt_param = h_Rho_rangle_2D->GetYaxis()->FindBin(0.0);			//Finding proper theta = 0 bin in Rho_avr(r,  Theta) histogram
 
-      long double rho_norm = (h_Rho_rangle_2D->GetBinContent(br_temp, nt_temp))/(h_Rho_rangle_2D->GetBinContent(br_temp, nt_param));
-      long double error_norm = (h_Rho_rangle_error_2D->GetBinContent(br_temp, nt_temp))/(h_Rho_rangle_2D->GetBinContent(br_temp, nt_temp));
+      long double rho_norm = 0.0;
+      long double error_norm = 0.0;
+      if((h_Rho_rangle_2D->GetBinContent(br_temp, nt_param)) != 0.0) {
+        rho_norm = (h_Rho_rangle_2D->GetBinContent(br_temp, nt_temp))/(h_Rho_rangle_2D->GetBinContent(br_temp, nt_param));
+        error_norm = (h_Rho_rangle_error_2D->GetBinContent(br_temp, nt_temp))/(h_Rho_rangle_2D->GetBinContent(br_temp, nt_temp));
+      }
 
       long double theta_err_temp = 1.0;
       for(int ner = 0; ner < n_datas; ner++) {					//Finding smallest error

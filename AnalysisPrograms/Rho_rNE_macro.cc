@@ -52,7 +52,7 @@ using namespace std;
 	- norm_file - name of file for parametrization (default = last file),
 
 	- bins_rho_N_part - number of bins in histograms of number of particles N_part (default = 40),
-	- bins_rho_r - number of bins in histogram of particles density Rho(r) (default = 40),
+	- bins_rho_r - number of bins in histogram of particles density Rho(r) (default = 100),
 
 	- r_number - number of points on axis of distance from cascade center r (default = 10)
 
@@ -73,45 +73,58 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
   //------------------------------------------------------------- 
 
   /*	In this part, previously generated files
-	is read and several parameters are extracted
-	from it.
+	are read and several parameters are extracted
+	from them.
   */
 
-  double meanN_part_params[3], sigmaN_part_params[3], cN_part_params[3]; 
+  double meanN_part_params[3], sigmaN_part_params[3]; 
   double E_min, E_max;
   double r_prc_max, r_rho_max;
   double N_part_min, N_part_max;  
 
-  ifstream param_fit_file("N(E)_fit_params.txt");
-  string line_fit;
+  //-------------------------
 
-  if(param_fit_file.is_open()) {
+  ifstream mN_param_fit_file("meanN(E)_fit_params.txt");
+  string mN_line_fit;
 
-    for(int ipar = 0; ipar < 3; ipar++) {		//Parameters of cN_part function
-      getline(param_fit_file, line_fit);
+  int ipar_mN = 0;
 
-      cN_part_params[ipar] = stod(line_fit);
-    }
+  if(mN_param_fit_file.is_open()) {
 
-    for(int ipar = 0; ipar < 3; ipar++) {		//Parameters of sigmaN_part function
-      getline(param_fit_file, line_fit);
-
-      sigmaN_part_params[ipar] = stod(line_fit);
-    }
-
-    for(int ipar = 0; ipar < 3; ipar++) {		//Parameters of meanN_part function
-      getline(param_fit_file, line_fit);
-
-      meanN_part_params[ipar] = stod(line_fit);
+    while(getline(mN_param_fit_file, mN_line_fit)) {  			//Parameters of meanN_part function
+      meanN_part_params[ipar_mN] = stod(mN_line_fit);
+      //cout << meanN_part_params[ipar_mN] <<endl;
+      ipar_mN++;
     }
 
   }
 
-  else cout<< "ERROR: COULD NOT FIND THE FIT PARAMETERS FILE" <<endl;
+  else cout<< "ERROR: COULD NOT FIND THE meanN(E) FIT PARAMETERS FILE" <<endl;
 
-  param_fit_file.close();
+  mN_param_fit_file.close();
 
+  //-------------------------
 
+  ifstream sN_param_fit_file("sigmaN(E)_fit_params.txt");
+  string sN_line_fit;
+
+  int ipar_sN = 0;
+
+  if(sN_param_fit_file.is_open()) {
+
+    while(getline(sN_param_fit_file, sN_line_fit)) {  			//Parameters of sigmaN_part function
+      sigmaN_part_params[ipar_sN] = stod(sN_line_fit);
+      //cout << sigmaN_part_params[ipar_sN] <<endl;
+      ipar_sN++;
+    }
+
+  }
+
+  else cout<< "ERROR: COULD NOT FIND THE sigmaN(E) FIT PARAMETERS FILE" <<endl;
+
+  sN_param_fit_file.close();
+
+  //-------------------------
 
   ifstream param_file("N(E)_params.txt");
   string line;
@@ -139,11 +152,24 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
     
   }
 
-  else cout<< "ERROR: COULD NOT FIND THE PARAMETERS FILE" <<endl;
+  else cout<< "ERROR: COULD NOT FIND THE N(E) PARAMETERS FILE" <<endl;
 
   param_file.close();
 
-  //-------------------------------------------------------------  
+  //------------------------------------------------------------- 
+
+  /*	In this part, functions of
+	mean_N_part(E), sigma_N_part(E), c_N_part(E)
+	are defined.
+  */
+
+  TF1 * f_meanN_part_E = new TF1("f_meanN_part_E" , " [0]*pow(x, [1]) + [2] ");
+  f_meanN_part_E->SetParameters(meanN_part_params[0], meanN_part_params[1], meanN_part_params[2]);		//Function found earlier - meanN_part(E)
+
+  TF1 * f_sigmaN_part_E = new TF1("f_sigmaN_part_E" , " [0]*pow(x, [1]) + [2] ");
+  f_sigmaN_part_E->SetParameters(sigmaN_part_params[0], sigmaN_part_params[1], sigmaN_part_params[2]);		//Function found earlier - sigmaN_part(E)
+
+  //------------------------------------------------------------- 
 
   /*	Here distance points for fitting
 	Rho(r, E) are set.
@@ -163,13 +189,37 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
 
   } 
 
+  //------------------------------------------------------------- 
+
+  /*	This part creates log bining for
+	Rho(r) histograms.
+  */
+
+  double Rr_bin_lst[bins_rho_r];
+  Rr_bin_lst[0] = 0.0;
+  double Rr_bin_temp = 100.0;
+  double bin_w_scale = pow(10.0, log10(r_prc_max/Rr_bin_temp)/double(bins_rho_r - 1));
+  
+  cout<< Rr_bin_lst[0] <<endl;
+  for(int rb = 1; rb < bins_rho_r - 1; rb++) {
+
+    Rr_bin_lst[rb] = Rr_bin_temp;						//Equally distributed for log scale
+    Rr_bin_temp = Rr_bin_temp * bin_w_scale;
+    //cout<< Rr_bin_lst[rb] <<endl;
+
+  } 
+
+  Rr_bin_lst[bins_rho_r - 1] = r_prc_max - 1.0;					//Modification preventing from getting out of histogram range
+
+  cout<< Rr_bin_lst[bins_rho_r - 1] <<endl;
+
+  const double *Rr_bins = Rr_bin_lst;
+
   //-------------------------------------------------------------
 
   /*	Here are only definitions of some
 	arrays and variables used later.
   */
-
-  double meanN_part_lst[n_datas], sigmaN_part_lst[n_datas], cN_part_lst[n_datas];			//An arrays of parameters of fitted functions: meanN_part, sigmaN_part and cN_part
 
   double Rho_NE_p0_lst[n_datas], Rho_NE_p1_lst[n_datas], Rho_NE_p2_lst[n_datas];			//An arrays of parameters of Rho(r, E) function
   double Rho_rN_p0_lst[n_datas], Rho_rN_p1_lst[n_datas], Rho_rN_p2_lst[n_datas];			//An arrays of parameters of Rho(r, N) function
@@ -234,16 +284,6 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
 
   //-------------------------------------------------------------  
 
-  /*	Here some arrays are filled
-	with zeros to avoid problems later.
-  */
-
-  for(int n = 0; n < n_datas; n++) {
-    E_lst[n] = meanN_part_lst[n] = sigmaN_part_lst[n] = cN_part_lst[n] = 0;
-  }
-
-  //-------------------------------------------------------------
-
   /*	Here are defined some directories
 	in which plots are stored.
   */
@@ -285,13 +325,14 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
 	Rho(r, E).
   */
 
-  TH2 * h_Rho_rE_2D = new TH2F("h_rho_rE", " #rho(r, E) distribution; r [cm]; File number ; #rho [cm^{-2}] ", bins_rho_r, 0, r_prc_max, n_datas, 0, n_datas);
+  TH2 * h_Rho_rE_2D = new TH2F("h_rho_rE", " #rho(r, E) distribution; r [cm]; File number ; #rho [cm^{-2}] ", bins_rho_r - 1, Rr_bins, n_datas, 0, n_datas);
 
   //-------------------------------------------------------------
 
   int nf = 0;									//Files iterator
-  int n_norm = n_datas + 1;							//Number of file for normalization
-  int id_len = sizeof(ID_criterium)/sizeof(ID_criterium[0]);
+  int n_norm = n_datas - 1;							//Number of file for normalization
+  //int id_len = sizeof(ID_criterium)/sizeof(ID_criterium[0]);			//Length of IDs array
+  int id_len = 12;								//Length of IDs array
 
   //-------------------------------------------------------------
 
@@ -408,28 +449,12 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
 
   //-------------------------------------------------------------
 
-  /*	In this part, functions of
-	mean_N_part(E), sigma_N_part(E), c_N_part(E)
-	are defined.
-  */
-
-  TF1 * f_meanN_part_E = new TF1("f_meanN_part_E" , " [0]*pow(x, [1]) + [2] " , 0, E_lst[n_datas]);
-  f_meanN_part_E->SetParameters(meanN_part_params[0], meanN_part_params[1], meanN_part_params[2]);		//Function found earlier - meanN_part(E)
-
-  TF1 * f_sigmaN_part_E = new TF1("f_sigmaN_part_E" , " [0]*pow(x, [1]) + [2] " , 0, E_lst[n_datas]);
-  f_sigmaN_part_E->SetParameters(sigmaN_part_params[0], sigmaN_part_params[1], sigmaN_part_params[2]);		//Function found earlier - sigmaN_part(E)
-
-  TF1 * f_cN_part_E = new TF1("f_cN_part_E" , " [0]*pow(x, [1]) + [2] " , 0, E_lst[n_datas]);
-  f_cN_part_E->SetParameters(cN_part_params[0], cN_part_params[1], cN_part_params[2]);				//Function found earlier - cN_part(E)
-
-  //-------------------------------------------------------------
-
   /*	In this part of code, temporary histogram
 	needed to calculate particles density Rho(r)
 	over distance r is created.
   */
 
-  TH1 * h_nr_temp = new TH1F(" ", " ; ; ", bins_rho_r, 0, r_prc_max);
+  TH1 * h_nr_temp = new TH1F(" ", " ; ; ", bins_rho_r - 1, Rr_bins);
 
   //-------------------------------------------------------------
 
@@ -441,7 +466,7 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
   double N_rN_min = f_meanN_part_E->Eval(E_lst[nf]) - 4*f_sigmaN_part_E->Eval(E_lst[nf]);
   if(N_rN_min <= 0) N_rN_min = N_part_min;
 
-  TH2 * h_nr_temp_2D = new TH2F(" ", " ; ; ; ", bins_rho_r - 1, 0.0, r_prc_max, bins_rho_N_part - 1, N_rN_min, N_rN_max);
+  TH2 * h_nr_temp_2D = new TH2F(" ", " ; ; ; ", bins_rho_r - 1, Rr_bins, bins_rho_N_part - 1, N_rN_min, N_rN_max);
 
   //-------------------------------------------------------------
 
@@ -542,7 +567,9 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
 	and graph over distance r is created.
   */
 
-  TH1F * h_Rho_avr = new TH1F("h_Rho_avr", " ; ; " , bins_rho_r - 1, 0, r_prc_max);
+  //TH1F * h_Rho_avr = new TH1F("h_Rho_avr", " ; ; " , bins_rho_r - 1, 0, r_prc_max);
+  TH1F * h_Rho_avr = new TH1F("h_Rho_avr", " ; ; " , bins_rho_r - 1, Rr_bins);
+
   TGraphErrors * g_Rho_avr = new TGraphErrors("Graph");
 
   string title_Rho_avr = " #rho_{avr}(r) distribution for E_{casc} = ";
@@ -590,7 +617,8 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
   A.SetLogy();
 
   string path_Rho_avr = Rho_avr_r_dir;
-  path_Rho_avr.append("/Rho_avr(r)_");
+  if(nf != n_norm) path_Rho_avr.append("/Rho_avr(r)_");
+  if((nf == n_norm) || (nf == n_datas - 1)) path_Rho_avr.append("/Rho_avr_norm(r)_");
   path_Rho_avr.append(to_string(E_lst[nf]));
   path_Rho_avr.append(".root");
 
@@ -635,8 +663,8 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
   long double N_rN_min_norm = (N_rN_min/f_meanN_part_E->Eval(E_lst[nf]));
   long double N_rN_max_norm = (N_rN_max/f_meanN_part_E->Eval(E_lst[nf]));
 
-  TH2 * h_Rho_rN_2D = new TH2F("h_Rho_rN_2D", Rho_rN_2D_title, bins_rho_r - 1, 0.0, r_prc_max, bins_rho_N_part - 1, N_rN_min, N_rN_max);
-  TH2 * h_Rho_rN_2D_norm = new TH2F("h_Rho_rN_2D_norm", Rho_rN_2D_title_norm, bins_rho_r - 1, 0.0, r_prc_max, bins_rho_N_part - 1, N_rN_min_norm, N_rN_max_norm);
+  TH2 * h_Rho_rN_2D = new TH2F("h_Rho_rN_2D", Rho_rN_2D_title, bins_rho_r - 1, Rr_bins, bins_rho_N_part - 1, N_rN_min, N_rN_max);
+  TH2 * h_Rho_rN_2D_norm = new TH2F("h_Rho_rN_2D_norm", Rho_rN_2D_title_norm, bins_rho_r - 1, Rr_bins, bins_rho_N_part - 1, N_rN_min_norm, N_rN_max_norm);
 
   //-------------------------------------------------------------
 
@@ -699,7 +727,7 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
 
   //Rho(N_mi, r) - 2D
   TCanvas J("J");
-  //J.SetLogx();
+  J.SetLogx();
   //J.SetLogy();
   J.SetLogz();
 
@@ -723,7 +751,7 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
 
 
   TCanvas Jn("Jn");
-  //Jn.SetLogx();
+  Jn.SetLogx();
   //Jn.SetLogy();
   Jn.SetLogz();
 
@@ -775,6 +803,7 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
       g_Rho_rN_1D->SetPoint(bn, N_part_lst[bn], Rho_N_lst[bn][rf]);
       g_Rho_rN_1D->SetPointError(bn, N_part_error[bn], Rho_N_error[bn][rf]);
     }
+
   }
 
   string title_Rho_rN_1D = "#rho(N)/#rho_{avr} distribution for r = ";
@@ -833,7 +862,7 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
   */
 
   int E_norm = n_datas - 1;
-  if(n_norm < n_datas) E_norm = n_norm;
+  E_norm = n_norm;
 
   for(int rf = 0; rf < r_number; rf++) {					//A loop over all distances r from the R_fit_lst array - Start DISTANCE LOOP
 
@@ -860,8 +889,8 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
 
   g_Rho_E->SetTitle(rho_fit_title);
 
-  g_Rho_E->SetMinimum(pow(10, -3));
-  g_Rho_E->SetMaximum(pow(10, 2));
+  //g_Rho_E->SetMinimum(0.5*Rho_E_temp[0]);
+  //g_Rho_E->SetMaximum(2*Rho_E_temp[n_datas - 1]);
 
 
   //g_Rho_E->GetXaxis()->SetTitle("E_{casc} [GeV]");
@@ -890,7 +919,7 @@ void Rho_rNE_macro(int ID_criterium[], string sim_dir = "/home/jerzy/CREDO/Anali
   */
 
   TCanvas Oh("Oh");
-  //O.SetLogx(); 
+  Oh.SetLogx(); 
   //Oh.SetLogy(); 
   Oh.SetLogz(); 
 

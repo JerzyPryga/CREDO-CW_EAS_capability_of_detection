@@ -41,9 +41,8 @@ using namespace std;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-/*	The main C++ program is here and
-	it just reads parameters from user
-	and executes previously written macros.
+/*	Macro with all inputs included which
+	executes previously written macros.
 */
 
 void MacroRhoRTheta(string current_dir) {					//Start PROGRAM
@@ -82,18 +81,19 @@ void MacroRhoRTheta(string current_dir) {					//Start PROGRAM
   string plots_dir = current_dir;
 
   int bins_rho_r, bins_rho_N_part, r_number, ID_min, ID_max;
-  int ID_criterium[9] = {5, 6, 0, 0, 0 ,0 ,0 ,0, 0};
+  int ID_criterium[12] = {5, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   double p_part_min, p_part_max, max_theta;
 
+  int id_len = 12;
+
   string input;
-  int id_len = sizeof(ID_criterium)/sizeof(ID_criterium[0]);
 
   bins_rho_r = 40;
   bins_rho_N_part = 40;
 
   r_number = 10;
 
-  p_part_min = 1.0;
+  p_part_min = 0.3;
   p_part_max = pow(10, 10);
 
   max_theta = 70.0;
@@ -171,17 +171,18 @@ void MacroRhoRTheta(string current_dir) {					//Start PROGRAM
   cout<< "1 - Photon gamma" <<endl;
   cout<< "2 - Positon e+" <<endl;
   cout<< "3 - Electron e-" <<endl;
-
-  cout<< "\n5 - Muon mi+" <<endl;
+  cout<< "5 - Muon mi+" <<endl;
   cout<< "6 - Muon mi-" <<endl;
   cout<< "7 - Pi meson pi0 " <<endl;
   cout<< "8 - Pi meson pi+" <<endl;
   cout<< "9 - Pi meson pi-" <<endl;
+  cout<< "13 - neutron n" <<endl;
+  cout<< "14 - proton p" <<endl;
 
   cout<< "\nWhole list of particles IDs can be found on: " <<endl;
   cout<< "https://web.ikp.kit.edu/corsika/usersguide/usersguide.pdf" <<endl;
 
-  cout<< "\nINPUT: IDs of particles in the shower (default " << ID_criterium[0] << " & " << ID_criterium[1] << ") : " <<endl;		//Inputing ID_min
+  cout<< "\nINPUT: IDs of particles in the shower (default " << ID_criterium[0] << " - " << ID_criterium[1] << ") : " <<endl;		//Inputing ID_min
 
   int id_iter = 0;
 
