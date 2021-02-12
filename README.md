@@ -20,7 +20,13 @@ Currently used simulations for angle distibution analysis:
 - Proton as primary particle,
 - 7 different angles (up to 70 degrees every 10 degrees).
 
-Next step is to extract information from simulations and turn them into set of rules formuleted as mathematical funtions. It is nessesary to do so because we characterize every EAS using its particle density function \rho. In this work it is a function of many parameters such as:
+Before starting any fitting or calculations some assumptions about EAS has to be taken. Current list of those is as follows:
+- Showers are circularly simetrical.
+- All showers are like produced by protons. 
+- Primary particles energy spectrum and frequancies are known.
+- Time blur of particles from the cascade is close to none.
+
+As w now the rules we must follow, the next step is to extract information from simulations and turn them into set of rules formuleted as mathematical funtions. It is nessesary to do so because we characterize every EAS using its particle density function \rho. In this work it is a function of many parameters such as:
 
 - E - energy of primary particle, 
 - r - distance from its center,
