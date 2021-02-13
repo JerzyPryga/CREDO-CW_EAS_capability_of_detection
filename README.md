@@ -43,6 +43,12 @@ Time \delta T is a unit of time in which we calculate the probability of signal 
 
 \\wzór
 
+- \delta T - coincidence time [s].
+- \ni - detectors efficiency [%].
+- A - surface area of the detector [cm^2].
+- I_bg - background particles flux [1/s cm^2].
+- f_bg - frequancy of non cosmic background signals [1/s].
+
 After calculating this, chance of coincidance signals is computed as well as expected number of such events in the time of measurement. Results of these calculations are presented later in table and are compared with expected number of signals caused by the background.
 
 Before starting any fitting or calculations some assumptions about EAS has to be taken. Current list of crucial ones is as follows:
@@ -53,9 +59,9 @@ Before starting any fitting or calculations some assumptions about EAS has to be
 
 As w now the rules we must follow, the next step is to extract information from simulations and turn them into set of rules formuleted as mathematical funtions. It is nessesary to do so because we characterize every EAS using its particle density function \rho. In this work it is a function of many parameters such as:
 
-- E - energy of primary particle, 
-- r - distance from its center,
-- \theta - primary particle approach direction zenith angle,
+- E - energy of primary particle [TeV], 
+- r - distance from its center [m],
+- \theta - primary particle approach direction zenith angle [radians],
 - N_part - total number of produced particles,
 - maybe more in the future...
 
@@ -78,20 +84,29 @@ must be performed. Formula below shows how it is computed (notice that with assu
 \\wzór
 
 - Q(n,k,P) - probability of k signals in system of n detectors.
-- r - distance to the center of the shower.
-- j(E) - cascades frequancy function.
-- E - energy of the showers.
-- T - time of measurement.
-- \Omega - spherical angle.
+- r - distance to the center of the shower [m].
+- j(E) - cascades frequancy function [1/s m^2].
+- E - energy of primary particle [TeV].
+- T - time of measurement [s].
+- \Omega - spherical angle [steradians].
 
 # Comparison with simpler method
 
-To check if the performed analysis was done right another approach to the problem was tested. As muons have been studied for many years, an approximate function for muons density on the ground level can be found in the literature. It depends on energy of primary particle and distance from the center of the shower just like it is desired in this work. In this analysis it was only modified by the scale factor of primary particle zenith angle. Thus, used formula is as follows:
+To check if the performed analysis was done right another approach to the problem was tested. As muons have been studied for many years, an approximate function for its density on the ground level can be found in the literature. It depends on total number of produced muons which is a function of the energy of primary particle and distance from the center of the shower. So the parameters taht charecterise the showers are the same as in analysis described earlier. In this work it was only modified by the scale factor of primary particle zenith angle. Thus, used formula is as follows:
 
 //wzór
 
-This comparison should help to judge if analysis described earlier, which is more general and gives more information about the behaviour of the system, is reasonable and does not consist any unrealistic assumptions.
+- r - distance to the center of the shower [m].
+- F(\theta) - This factor scales the density as zenith angle of primary particle approach direction changes (as described in formula []).
+- N_part - Total umber of produced muons as a function of primary particle energy.
+- E - energy of primary particle [TeV].
+
+Further steps in the analysis are the same as previously described. This comparison should help to judge if analysis described earlier, which is more general and gives more information about the behaviour of the system, is reasonable and does not consist any unrealistic assumptions.
 
 # Current results
+
+Here are presented results of above analysis calculated for exemplary system. Properties of the system are listed below:
+- 4 devices (Cosmic Watches).
+- 
 
 # Plans for the future
