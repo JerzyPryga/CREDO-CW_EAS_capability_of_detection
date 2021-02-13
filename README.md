@@ -105,8 +105,23 @@ Further steps in the analysis are the same as previously described. This compari
 
 # Current results
 
-Here are presented results of above analysis calculated for exemplary system. Properties of the system are listed below:
+Here are presented results of above analysis calculated for exemplary system. Assumed properties of the system are listed below:
 - 4 devices (Cosmic Watches).
-- 
+- Time of coincinence \delta T = 200 ns.
+- Area of the surface A = 25 cm^2.
+- Efficiency of the detector \ni = 95%.
+- Particle that gives signal: muons with E >= 1 GeV.
+- Time of measurement t = 7 days.
+
+The choice of above parameters are not arbitrary. They are the same as in the system tested by prof. Tadeusz Wibig in his work (only effeciency was arbitrary chosen), however there is no certainty about which particles gives signal in the detector. However, according to information given by designers of Cosmic Watch detector it should be muons. These assumptions and choice of parameters yield one of the following properties of the background:
+- Background particles flux I_bg = 109 [1/s cm^2].
+- Frequancy of non cosmic background signals f_bg = 0.1 [1/s] (arbitrary chosen).
+
+In further calculations, only moun component of the EAS has to be taken into account. After carrying all steps of the analysis the final results are as follows:
+
+//tableka
+
+
+
 
 # Plans for the future
