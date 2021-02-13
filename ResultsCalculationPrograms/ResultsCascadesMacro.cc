@@ -106,7 +106,7 @@ void ResultsCascadesMacro(string current_dir) {					//Start MACRO
   R_maximum = 100000;
 
   e_max = 100;
-  eps = 1500;
+  eps = 1000;
   eps_phi = 100;
   n_rand = 10;
 
@@ -174,7 +174,7 @@ void ResultsCascadesMacro(string current_dir) {					//Start MACRO
   cout<<endl;
   cout<< "CASCADE ASSUMPTIONS" <<endl;
 
-  cout<< "INPUT: maximum vertical angle fi [degrees] (default = 90) : ";			//Inputing fi
+  cout<< "INPUT: maximum vertical angle fi [degrees] (default = " << fi << ") : ";			//Inputing fi
 
   getline(cin, input);
   if(!input.empty()) {
@@ -183,7 +183,7 @@ void ResultsCascadesMacro(string current_dir) {					//Start MACRO
   }
 
 
-  cout<< "INPUT: maximum energy of considered showers [log(E/TeV)] (default = 6) : ";		//Inputing E_max
+  cout<< "INPUT: maximum energy of considered showers [log(E/TeV)] (default = " << E_max << ") : ";		//Inputing E_max
 
   getline(cin, input);
   if(!input.empty()) {
@@ -226,7 +226,7 @@ void ResultsCascadesMacro(string current_dir) {					//Start MACRO
 
   if((If_Rprc == false) && (If_Rrho == false)) {
 
-  cout<< "INPUT: maximum distance to which it will be integrated R_maximum [cm] (default = 100 000) : ";		//Inputing R_maximum
+  cout<< "INPUT: maximum distance to which it will be integrated R_maximum [cm] (default = " << R_maximum << ") : ";		//Inputing R_maximum
 
   getline(cin, input);
   if(!input.empty()) {
@@ -239,7 +239,7 @@ void ResultsCascadesMacro(string current_dir) {					//Start MACRO
   if(If_Rprc == true) R_maximum = 0;
   if(If_Rrho == true) R_maximum = 1;
 
-  cout<< "INPUT: number of steps in integral over energy e_max (default = 100) : ";		//Inputing e_max
+  cout<< "INPUT: number of steps in integral over energy e_max (default = " << e_max << ") : ";		//Inputing e_max
 
   getline(cin, input);
   if(!input.empty()) {
@@ -247,7 +247,7 @@ void ResultsCascadesMacro(string current_dir) {					//Start MACRO
     stream >> e_max;
   }
 
-  cout<< "INPUT: number of steps in integral over distance eps (default = 1500) : ";		//Inputing eps
+  cout<< "INPUT: number of steps in integral over distance eps (default = " << eps << ") : ";		//Inputing eps
 
   getline(cin, input);
   if(!input.empty()) {
@@ -255,7 +255,7 @@ void ResultsCascadesMacro(string current_dir) {					//Start MACRO
     stream >> eps;
   }
 
-  cout<< "INPUT: number of steps in integral over spherical angle eps_phi (default = 100): ";		//Inputing eps_phi
+  cout<< "INPUT: number of steps in integral over spherical angle eps_phi (default = " << eps_phi << ") : ";		//Inputing eps_phi
 
   getline(cin, input);
   if(!input.empty()) {
@@ -263,7 +263,7 @@ void ResultsCascadesMacro(string current_dir) {					//Start MACRO
     stream >> eps_phi;
   }
 
-  cout<< "INPUT: number of draws for fluctuations in each step n_rand (default = 10) : ";		//Inputing n_rand
+  cout<< "INPUT: number of draws for fluctuations in each step n_rand (default = " << n_rand << ") : ";		//Inputing n_rand
 
   getline(cin, input);
   if(!input.empty()) {

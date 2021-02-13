@@ -56,7 +56,7 @@ long double array_avrA(double array[], int n);
         - our_l - lenght of particular arrays,
 */
 
-void CascadeSignalEstimationApprox(int I_criterium[], string params_dir = "/home/jerzy/CREDO/Analiza/ResultCalculations/Mu", string plots_dir = get_current_dir_name(), double E_max = 6, double R_maximum = pow(10, 5), int e_max = 100, double Aprime = 25, double eff = 0.95, int n = 4, double Tdet = pow(10, -7), double f_fake = 0.1, int Tp = 3600*24*7, double fi = 90, int eps = 1500, int eps_phi = 100, int n_rand = 10, int our_l = 200)
+void CascadeSignalEstimationApprox(int I_criterium[], string params_dir = "/home/jerzy/CREDO/Analiza/ResultCalculations/Mu", string plots_dir = get_current_dir_name(), double E_max = 6, double R_maximum = pow(10, 5), int e_max = 100, double Aprime = 25, double eff = 0.95, int n = 4, double Tdet = pow(10, -7), double f_fake = 0.1, int Tp = 3600*24*7, double fi = 90, int eps = 1000, int eps_phi = 100, int n_rand = 10, int our_l = 200)
 
 {
   //-----------------------------------------------------------------
@@ -233,6 +233,18 @@ void CascadeSignalEstimationApprox(int I_criterium[], string params_dir = "/home
 
   //-----------------------------------------------------------------
 
+  /*	Here the directory for plots is
+	created.
+  */
+
+  string N_casc_E_dir_name = "/N_casc_approx(E)";		//Naming directory
+  string N_casc_E_dir = plots_dir;
+  N_casc_E_dir.append(N_casc_E_dir_name);
+
+  int check_N_casc = mkdir(N_casc_E_dir.c_str(), 0777);		//Creating directory
+
+  //-----------------------------------------------------------------
+
   /*	This part of code calculates flux of
 	cosmic rays background.
   */
@@ -328,7 +340,7 @@ void CascadeSignalEstimationApprox(int I_criterium[], string params_dir = "/home
   long double** NiK = 0;					//An arry of coincidance signals for each energy sub-range
   NiK = new long double*[e_max];
 
-  for(int i = 0; i < e_max; i++) {
+  for(int i = 0; i <= e_max; i++) {
     NiK[i] = new long double[n+1];
 
     for(int j = 0; j < n+1; j++) {
@@ -342,11 +354,11 @@ void CascadeSignalEstimationApprox(int I_criterium[], string params_dir = "/home
   /*	Here energy ranges array is set.
   */
 
-  long double E_lim[e_max];
+  long double E_lim[e_max + 1];
   long double E_lim_temp = 1;
   long double kn = pow(10.0, E_max/double(e_max));
 
-  for(int en = 0; en < e_max; en++) {
+  for(int en = 0; en <= e_max; en++) {
 
     E_lim[en] = E_lim_temp;							//Equally distributed on log scale
     E_lim_temp = E_lim_temp * kn;
@@ -558,8 +570,6 @@ void CascadeSignalEstimationApprox(int I_criterium[], string params_dir = "/home
   E0 = 0.7*E_lim[e];							//Minimal energy of cascades [TeV]
   Emax = 0.7*E_lim[e+1];						//Maximal energy of cascades [TeV]
 
-  if(e == e_max - 1) Emax = pow(10, E_max);
-
   FE = FjEA(E0*pow(10, 3), Emax*pow(10, 3));
 
 
@@ -632,7 +642,7 @@ void CascadeSignalEstimationApprox(int I_criterium[], string params_dir = "/home
   cout<<"k	|	N(k)		|	f(k)" <<endl;
   cout<<"________________________________________________" <<endl;
 
-  for(int nk = 1; nk < n+1; nk++) {
+  for(int nk = 1; nk <= n; nk++) {
 
     cout<< nk << "	|	" << Nsum[nk];
     cout<< "	|	" << Nsum[nk]/Tp << " [s^(-1)]";
@@ -644,15 +654,14 @@ void CascadeSignalEstimationApprox(int I_criterium[], string params_dir = "/home
 
   cout<<"________________________________________________" <<endl;
   cout<<"\nEnergy range |				";
-  for(int k = 1; k < n+1; k++) cout<<" |	N(E, k = " << k << ") ";
+  for(int k = 1; k <= n; k++) cout<<" |	N(E, k = " << k << ") ";
   cout<<endl;
   cout<<"________________________________________________" <<endl;
 
   for(int ne = 0; ne < e_max; ne++) {
-    if(ne < e_max - 1) cout<< "Energy range ( " << E_lim[ne] << " - " << E_lim[ne + 1] << " ) TeV :		";
-    if(ne == e_max - 1) cout<< "Energy range ( " << E_lim[ne] << " - " << " 10e" << E_max << " ) TeV :		";
+    cout<< "Energy range ( " << E_lim[ne] << " - " << E_lim[ne + 1] << " ) TeV :		";
 
-    for(int nk = 1; nk < n+1; nk++) cout<< NiK[ne][nk] << " |		";
+    for(int nk = 1; nk <= n; nk++) cout<< NiK[ne][nk] << " |		";
     cout<<endl;
     
   }
@@ -668,31 +677,24 @@ void CascadeSignalEstimationApprox(int I_criterium[], string params_dir = "/home
 
   TMultiGraph * nE_g_All = new TMultiGraph();
 
+  cout<<endl;  
+  string name_nE_g_all = N_casc_E_dir;
+  name_nE_g_all.append("/N_cascApprox_All.png");
+  const char* nE_g_name_all = name_nE_g_all.c_str();
+
+  double Ncasc_max = 0.0;
+
   for(int nk = 1; nk < n+1; nk++) {
 
     TGraph * nE_g = new TGraph();
 
-    for(int ne = 0; ne < e_max - 1; ne++) { 
+    for(int ne = 0; ne < e_max; ne++) { 
 
-      nE_g->SetPoint(ne + 1, E_lim[ne], NiK[ne][nk]/Nsum[nk]);
-    
+      nE_g->SetPoint(ne + 1, E_lim[ne], 100*(NiK[ne][nk]/Nsum[nk]));
+
+      if(100*(NiK[ne][nk]/Nsum[nk]) > Ncasc_max) Ncasc_max = 100*(NiK[ne][nk]/Nsum[nk]);
+									//Finding maximum value
     }
-
-    nE_g_All->Add(nE_g);
-
-    string title_nE_g_All = " #LT N_{casc}(k, E) #GT for k: 1 - ";
-    title_nE_g_All.append(to_string(n));
-
-    nE_g_All->SetTitle(title_nE_g_All.c_str());
-    nE_g_All->GetXaxis()->SetTitle("E [TeV]");
-    nE_g_All->GetYaxis()->SetTitle("#LT N_{casc} #GT [%]");
-
-    nE_g_All->GetXaxis()->SetLimits(0.7, pow(10, E_max));
-
-    nE_g_All->Draw("AP");
-  
-    cout<<endl;
-    A.SaveAs("N_cascApprox_All.png");					//Saving into .png file
 
     string title_nE_g = " #LT N_{casc}(k, E) #GT for k = ";
     title_nE_g.append(to_string(nk));
@@ -705,7 +707,7 @@ void CascadeSignalEstimationApprox(int I_criterium[], string params_dir = "/home
     nE_g->SetMarkerSize(1);
     nE_g->SetMarkerColor(nk);
 
-    string name_nE_g = plots_dir;
+    string name_nE_g = N_casc_E_dir;
     name_nE_g.append("/N_cascApprox(");
     name_nE_g.append(to_string(nk));
     name_nE_g.append(",E).png");
@@ -726,11 +728,12 @@ void CascadeSignalEstimationApprox(int I_criterium[], string params_dir = "/home
   nE_g_All->GetYaxis()->SetTitle("#LT N_{casc} #GT [%]");
 
   nE_g_All->GetXaxis()->SetLimits(0.7, pow(10, E_max));
+  nE_g_All->SetMaximum(1.1*Ncasc_max);
 
   nE_g_All->Draw("AP");
-  
+
   cout<<endl;
-  A.SaveAs("N_cascApprox_All.png");					//Saving into .png file
+  A.SaveAs(nE_g_name_all);						//Saving into .png file
 
   nE_g_All->Delete();
 
