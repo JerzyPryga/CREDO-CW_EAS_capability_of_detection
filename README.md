@@ -78,6 +78,8 @@ Next step is to calculate probability of a signal to happen when there is a casc
 
 \\wzór
 
+There is also another effect in the cascades that could have impact on the probability of coincidence signals. It is currently under investigation, but early results suggest that when one particle that originates from the shower is detected, then chance taht another one reach the ground in close region of such event should increase. This "clustering" effect could be most likely explained by fact, that particles in the shower are produced in at least pairs. Thus, when particles are produced together not very high in the atmosphere they should hit the ground close to each other as they may not have time to travel further. In this work this results are included in calculations. The function which scale the probability of detections is a function of particles density and it impacts coincidence signals of 2 and more.
+
 To evaluate expected number of events coused by EAS on integration over all energies of primary particles, area around the devices and sperical angle of the sky
 must be performed. Formula below shows how it is computed (notice that with assumption that cascades are circulaly symetrical reduces integral ofver horizontal angle to the factor of 2 \pi r):
 
