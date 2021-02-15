@@ -56,7 +56,7 @@ After calculating this, chance of coincidence signals is computed as well as exp
 <a href="https://www.codecogs.com/eqnedit.php?latex=\langle&space;N_{bg}(k)&space;\rangle&space;=&space;Q(n,k,P_{bg})&space;\cdot&space;\frac{T}{\delta&space;T}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\langle&space;N_{bg}(k)&space;\rangle&space;=&space;Q(n,k,P_{bg})&space;\cdot&space;\frac{T}{\delta&space;T}" title="\langle N_{bg}(k) \rangle = Q(n,k,P_{bg}) \cdot \frac{T}{\delta T}" /></a>
 
 Where:
-- <a href="https://www.codecogs.com/eqnedit.php?latex=Q(n,k,P_{bg)})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?Q(n,k,P_{bg)})" title="Q(n,k,P_{bg)})" /></a> - probability of k signals in system of n detectors (given by binomial distribution).
+- <a href="https://www.codecogs.com/eqnedit.php?latex=Q(n,k,P_{bg})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?Q(n,k,P_{bg})" title="Q(n,k,P_{bg})" /></a> - probability of k signals in system of n detectors (given by binomial distribution).
 - T - time of measurement [s].
 - <a href="https://www.codecogs.com/eqnedit.php?latex=\delta&space;T" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\delta&space;T" title="\delta T" /></a> - time of coincidence [s].
 
@@ -107,7 +107,7 @@ To evaluate expected number of events caused by EAS on integration over all ener
 - T - time of measurement [s].
 - <a href="https://www.codecogs.com/eqnedit.php?latex=\Omega" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Omega" title="\Omega" /></a> - spherical angle [steradians].
 
-Of course the integration must be performed in certain limits, thus the primary cosmic-rays energy range and maximal distance from the shower must be chosen. Integration up to pi/2 over zenith angle is obvious as it was assumed that particles from all directions can be detected. Criteria of choice of the maximal distance may be different and in this work two were considered. Namely:
+Of course the integration must be performed in certain limits, thus the primary cosmic-rays energy range and maximal distance from the shower must be chosen. Integration up to <a href="https://www.codecogs.com/eqnedit.php?latex=\frac{\pi}{2}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{\pi}{2}" title="\frac{\pi}{2}" /></a> over zenith angle is obvious as it was assumed that particles from all directions can be detected. Criteria of choice of the maximal distance may be different and in this work two were considered. Namely:
 - <a href="https://www.codecogs.com/eqnedit.php?latex=R_{prc}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?R_{prc}" title="R_{prc}" /></a> - Radius in which certain percent (in this case 95% was chosen) of particles produced by the cascade are included.
 - <a href="https://www.codecogs.com/eqnedit.php?latex=R_{rho}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?R_{rho}" title="R_{rho}" /></a> - Radius in which shower particles density is greater than the avereage background.
 Both of this quantities were analysed and characterised as a function of energy of primary particle.
@@ -144,7 +144,7 @@ Here are presented results of above analysis calculated for exemplary system. As
 <a href="https://www.codecogs.com/eqnedit.php?latex=muons\&space;with\&space;E&space;\geqslant&space;1&space;GeV" target="_blank"><img src="https://latex.codecogs.com/gif.latex?muons\&space;with\&space;E&space;\geqslant&space;1&space;GeV" title="muons\ with\ E \geqslant 1 GeV" /></a>.
 - Time of measurement t = 7 days.
 
-The choice of above parameters are not arbitrary. They are the same as in the system tested by prof. Tadeusz Wibig in his work (only efficiency was arbitrary chosen), however there is no certainty about which particles gives signal in the detector. However, according to information given by designers of Cosmic Watch detector it should be muons. These assumptions and choice of parameters yield one of the following properties of the background:
+The choice of above parameters are not arbitrary. They are the same as in the system tested by [prof. Tadeusz Wibig in his work](https://iopscience.iop.org/article/10.1088/1361-6552/ab9dbc/meta) (only efficiency was arbitrary chosen), however there is no certainty about which particles gives signal in the detector. However, according to information given by designers of Cosmic Watch detector it should be muons. These assumptions and choice of parameters yield one of the following properties of the background:
 - Background particles flux:
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=I_{bg}&space;=&space;109.96\&space;[\frac{1}{m^2s}]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?I_{bg}&space;=&space;109.96\&space;[\frac{1}{m^2s}]" title="I_{bg} = 109.96\ [\frac{1}{m^2s}]" /></a>.
@@ -190,3 +190,9 @@ Obviously, there are many way in which this work can be improved and developed. 
 Another plan is to build our own system of detectors. It would be just like the example presented in the results section. Than, acquired knowledge and possible future tests of behaviour of such system could help to take some more realistic assumptions in the analysis. Also with such tool working, new results of measurement could be constantly compared with computations which could help to improve this work. As written earlier, everything is still in progress.
 
 Final goal of this mini project is to confirm that such method is a reliable way of detecting EAS.
+
+# References
+
+- [prof. Wibig work](https://iopscience.iop.org/article/10.1088/1361-6552/ab9dbc/meta)
+- [CREDO website](https://credo.science/)
+- [CREDO Colaboration Review Article](https://www.mdpi.com/2073-8994/12/11/1835)
