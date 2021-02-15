@@ -44,7 +44,7 @@ Time <a href="https://www.codecogs.com/eqnedit.php?latex=\delta&space;T" target=
 <a href="https://www.codecogs.com/eqnedit.php?latex=P_{bg}&space;=&space;1&space;-&space;exp(\delta&space;T&space;(\eta&space;\cdot&space;A&space;\cdot&space;I_{bg})&plus;f_{bg})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?P_{bg}&space;=&space;1&space;-&space;exp(\delta&space;T&space;(\eta&space;\cdot&space;A&space;\cdot&space;I_{bg})&plus;f_{bg})" title="P_{bg} = 1 - exp(\delta T (\eta \cdot A \cdot I_{bg})+f_{bg})" /></a>
 
 - <a href="https://www.codecogs.com/eqnedit.php?latex=\delta&space;T" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\delta&space;T" title="\delta T" /></a> - coincidence time [s].
-- <a href="https://www.codecogs.com/eqnedit.php?latex=\eta" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\eta" title="\eta" /></a>- detectors efficiency [%].
+- <a href="https://www.codecogs.com/eqnedit.php?latex=\eta" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\eta" title="\eta" /></a> - detectors efficiency [%].
 - <a href="https://www.codecogs.com/eqnedit.php?latex=A" target="_blank"><img src="https://latex.codecogs.com/gif.latex?A" title="A" /></a> - surface area of the detector [<a href="https://www.codecogs.com/eqnedit.php?latex=cm^2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?cm^2" title="cm^2" /></a>].
 - <a href="https://www.codecogs.com/eqnedit.php?latex=I_{bg}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?I_{bg}" title="I_{bg}" /></a> - background particles flux <a href="https://www.codecogs.com/eqnedit.php?latex=[\frac{1}{cm^2s}]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?[\frac{1}{cm^2s}]" title="[\frac{1}{cm^2s}]" /></a>.
 - <a href="https://www.codecogs.com/eqnedit.php?latex=f_{bg}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?f_{bg}" title="f_{bg}" /></a> - frequency of non cosmic background signals <a href="https://www.codecogs.com/eqnedit.php?latex=[\frac{1}{s}]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?[\frac{1}{s}]" title="[\frac{1}{s}]" /></a>.
@@ -54,7 +54,7 @@ After calculating this, chance of coincidence signals is computed as well as exp
 <a href="https://www.codecogs.com/eqnedit.php?latex=\langle&space;N_{bg}(k)&space;\rangle&space;=&space;Q(n,k,P_{bg})&space;\cdot&space;\frac{T}{\delta&space;T}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\langle&space;N_{bg}(k)&space;\rangle&space;=&space;Q(n,k,P_{bg})&space;\cdot&space;\frac{T}{\delta&space;T}" title="\langle N_{bg}(k) \rangle = Q(n,k,P_{bg}) \cdot \frac{T}{\delta T}" /></a>
 
 Where:
-- Q(n,k,P_{bg}) - probability of k signals in system of n detectors (given by binomial distribution).
+- <a href="https://www.codecogs.com/eqnedit.php?latex=Q(n,k,P_{bg)})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?Q(n,k,P_{bg)})" title="Q(n,k,P_{bg)})" /></a> - probability of k signals in system of n detectors (given by binomial distribution).
 - T - time of measurement [s].
 - <a href="https://www.codecogs.com/eqnedit.php?latex=\delta&space;T" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\delta&space;T" title="\delta T" /></a> - time of coincidence [s].
 
@@ -86,6 +86,10 @@ Final <a href="https://www.codecogs.com/eqnedit.php?latex=\rho" target="_blank">
 Next step is to calculate probability of a signal to happen when there is a cascade near the detector. Assumptions about detectors are the same as described earlier. Formula for single signal probability is as follows:
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=P&space;=&space;1&space;-&space;exp(\eta&space;\cdot&space;A&space;\cdot&space;\rho(r,&space;\theta,&space;E,&space;N_{part}))" target="_blank"><img src="https://latex.codecogs.com/gif.latex?P&space;=&space;1&space;-&space;exp(\eta&space;\cdot&space;A&space;\cdot&space;\rho(r,&space;\theta,&space;E,&space;N_{part}))" title="P = 1 - exp(\eta \cdot A \cdot \rho(r, \theta, E, N_{part}))" /></a>
+
+- <a href="https://www.codecogs.com/eqnedit.php?latex=\eta" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\eta" title="\eta" /></a> - detectors efficiency [%].
+- <a href="https://www.codecogs.com/eqnedit.php?latex=A" target="_blank"><img src="https://latex.codecogs.com/gif.latex?A" title="A" /></a> - surface area of the detector [<a href="https://www.codecogs.com/eqnedit.php?latex=cm^2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?cm^2" title="cm^2" /></a>].
+- <a href="https://www.codecogs.com/eqnedit.php?latex=\rho(r,&space;\theta,&space;E,&space;N_{part})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\rho(r,&space;\theta,&space;E,&space;N_{part})" title="\rho(r, \theta, E, N_{part})" /></a> - particles density function <a href="https://www.codecogs.com/eqnedit.php?latex=[\frac{1}{cm^2}]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?[\frac{1}{cm^2}]" title="[\frac{1}{cm^2}]" /></a>.
 
 There is also another effect in the cascades that could have impact on the probability of coincidence signals. It is currently under investigation, but early results suggest that when one particle that originates from the shower is detected, then chance that another one reach the ground in close region of such event should increase. This "clustering" effect could be most likely explained by fact, that particles in the shower are produced in at least pairs. Thus, when particles are produced together not very high in the atmosphere they should hit the ground close to each other as they may not have time to travel further. In this work this results are included in calculations. The function which scale the probability of multiple signals is a function of particles density and it impacts coincidence signals of 2 and more.
 
@@ -129,7 +133,8 @@ Here are presented results of above analysis calculated for exemplary system. As
 - Time of measurement t = 7 days.
 
 The choice of above parameters are not arbitrary. They are the same as in the system tested by prof. Tadeusz Wibig in his work (only efficiency was arbitrary chosen), however there is no certainty about which particles gives signal in the detector. However, according to information given by designers of Cosmic Watch detector it should be muons. These assumptions and choice of parameters yield one of the following properties of the background:
-- Background particles flux <a href="https://www.codecogs.com/eqnedit.php?latex=I_{bg}&space;=&space;109.96\&space;[\frac{1}{m^2s}]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?I_{bg}&space;=&space;109.96\&space;[\frac{1}{m^2s}]" title="I_{bg} = 109.96\ [\frac{1}{m^2s}]" /></a>.
+- Background particles flux:
+<a href="https://www.codecogs.com/eqnedit.php?latex=I_{bg}&space;=&space;109.96\&space;[\frac{1}{m^2s}]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?I_{bg}&space;=&space;109.96\&space;[\frac{1}{m^2s}]" title="I_{bg} = 109.96\ [\frac{1}{m^2s}]" /></a>.
 - Frequency of non cosmic background signals <a href="https://www.codecogs.com/eqnedit.php?latex=f_{bg}&space;=&space;0.1\&space;[\frac{1}{s}]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?f_{bg}&space;=&space;0.1\&space;[\frac{1}{s}]" title="f_{bg} = 0.1\ [\frac{1}{s}]" /></a> (arbitrary chosen).
 
 Choice of integration limits:
