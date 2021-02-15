@@ -49,7 +49,16 @@ Time <a href="https://www.codecogs.com/eqnedit.php?latex=\delta&space;T" target=
 - <a href="https://www.codecogs.com/eqnedit.php?latex=I_{bg}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?I_{bg}" title="I_{bg}" /></a> - background particles flux <a href="https://www.codecogs.com/eqnedit.php?latex=[\frac{1}{cm^2s}]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?[\frac{1}{cm^2s}]" title="[\frac{1}{cm^2s}]" /></a>.
 - <a href="https://www.codecogs.com/eqnedit.php?latex=f_{bg}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?f_{bg}" title="f_{bg}" /></a> - frequency of non cosmic background signals <a href="https://www.codecogs.com/eqnedit.php?latex=[\frac{1}{s}]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?[\frac{1}{s}]" title="[\frac{1}{s}]" /></a>.
 
-After calculating this, chance of coincidence signals is computed as well as expected number of such events in the time of measurement. Results of these calculations are presented later in table and are compared with expected number of signals caused by the background.
+After calculating this, chance of coincidence signals is computed as well as expected number of such events in the time of measurement using following formula:
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\langle&space;N_{bg}(k)&space;\rangle&space;=&space;Q(n,k,P_{bg})&space;\cdot&space;\frac{T}{\delta&space;T}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\langle&space;N_{bg}(k)&space;\rangle&space;=&space;Q(n,k,P_{bg})&space;\cdot&space;\frac{T}{\delta&space;T}" title="\langle N_{bg}(k) \rangle = Q(n,k,P_{bg}) \cdot \frac{T}{\delta T}" /></a>
+
+Where:
+- Q(n,k,P_{bg}) - probability of k signals in system of n detectors (given by binomial distribution).
+- T - time of measurement [s].
+- <a href="https://www.codecogs.com/eqnedit.php?latex=\delta&space;T" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\delta&space;T" title="\delta T" /></a> - time of coincidence [s].
+
+Results of those calculations are presented later in table and are compared with expected number of signals caused by the background.
 
 Before starting any fitting or calculations some assumptions about EAS has to be taken. Current list of crucial ones is as follows:
 - Showers are circularly symmetrical.
@@ -82,18 +91,18 @@ There is also another effect in the cascades that could have impact on the proba
 
 To evaluate expected number of events caused by EAS on integration over all energies of primary particles, area around the devices and spherical angle of the sky must be performed. Formula below shows how it is computed (notice that with assumption that cascades are circularly symmetrical reduces integral over horizontal angle to the factor of <a href="https://www.codecogs.com/eqnedit.php?latex=2&space;\pi&space;r" target="_blank"><img src="https://latex.codecogs.com/gif.latex?2&space;\pi&space;r" title="2 \pi r" /></a>):
 
-\\wzór
+<a href="https://www.codecogs.com/eqnedit.php?latex=\langle&space;N(k)&space;\rangle&space;=&space;\int_{0}^{r_{max}}\int_{E_{min}}^{E_{max}}\int_{0}^{\frac{\pi}{2}}Q(n,k,P)&space;2\pi&space;r&space;j(E)&space;T&space;d\Omega&space;dE&space;dr" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\langle&space;N(k)&space;\rangle&space;=&space;\int_{0}^{r_{max}}\int_{E_{min}}^{E_{max}}\int_{0}^{\frac{\pi}{2}}Q(n,k,P)&space;2\pi&space;r&space;j(E)&space;T&space;d\Omega&space;dE&space;dr" title="\langle N(k) \rangle = \int_{0}^{r_{max}}\int_{E_{min}}^{E_{max}}\int_{0}^{\frac{\pi}{2}}Q(n,k,P) 2\pi r j(E) T d\Omega dE dr" /></a>
 
-- Q(n,k,P) - probability of k signals in system of n detectors.
+- Q(n,k,P) - probability of k signals in system of n detectors (given by binomial distribution).
 - r - distance to the centre of the shower [m].
-- j(E) - cascades frequency function [1/s m^2].
+- j(E) - cascades frequency function <a href="https://www.codecogs.com/eqnedit.php?latex=[\frac{1}{m^2s}]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?[\frac{1}{m^2s}]" title="[\frac{1}{m^2s}]" /></a>.
 - E - energy of primary particle [TeV].
 - T - time of measurement [s].
-- \Omega - spherical angle [steradians].
+- <a href="https://www.codecogs.com/eqnedit.php?latex=\Omega" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Omega" title="\Omega" /></a> - spherical angle [steradians].
 
 Of course the integration must be performed in certain limits, thus the primary cosmic-rays energy range and maximal distance from the shower must be chosen. Integration up to pi/2 over zenith angle is obvious as it was assumed that particles from all directions can be detected. Criteria of choice of the maximal distance may be different and in this work two were considered. Namely:
-- R_prc - Radius in which certain percent (in this case 95% was chosen) of particles produced by the cascade are included.
-- R_rho - Radius in which shower particles density is greater than the avereage background.
+- <a href="https://www.codecogs.com/eqnedit.php?latex=R_{prc}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?R_{prc}" title="R_{prc}" /></a> - Radius in which certain percent (in this case 95% was chosen) of particles produced by the cascade are included.
+- <a href="https://www.codecogs.com/eqnedit.php?latex=R_{rho}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?R_{rho}" title="R_{rho}" /></a> - Radius in which shower particles density is greater than the avereage background.
 Both of this quantities were analysed and characterised as a function of energy of primary particle.
 
 # Comparison with simpler method
@@ -120,8 +129,8 @@ Here are presented results of above analysis calculated for exemplary system. As
 - Time of measurement t = 7 days.
 
 The choice of above parameters are not arbitrary. They are the same as in the system tested by prof. Tadeusz Wibig in his work (only efficiency was arbitrary chosen), however there is no certainty about which particles gives signal in the detector. However, according to information given by designers of Cosmic Watch detector it should be muons. These assumptions and choice of parameters yield one of the following properties of the background:
-- Background particles flux I_bg = 109.96 [1/s cm^2].
-- Frequency of non cosmic background signals f_bg = 0.1 [1/s] (arbitrary chosen).
+- Background particles flux <a href="https://www.codecogs.com/eqnedit.php?latex=I_{bg}&space;=&space;109.96\&space;[\frac{1}{m^2s}]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?I_{bg}&space;=&space;109.96\&space;[\frac{1}{m^2s}]" title="I_{bg} = 109.96\ [\frac{1}{m^2s}]" /></a>.
+- Frequency of non cosmic background signals <a href="https://www.codecogs.com/eqnedit.php?latex=f_{bg}&space;=&space;0.1\&space;[\frac{1}{s}]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?f_{bg}&space;=&space;0.1\&space;[\frac{1}{s}]" title="f_{bg} = 0.1\ [\frac{1}{s}]" /></a> (arbitrary chosen).
 
 Choice of integration limits:
 - Energy range: 1 TeV - 10^5 TeV.
