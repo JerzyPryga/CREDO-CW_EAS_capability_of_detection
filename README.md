@@ -41,7 +41,7 @@ Next step is to calculate probability of a fake signal to happen. Thus, again so
 
 Time \delta T is a unit of time in which we calculate the probability of signal to happen. Below formula shows how this is done:
 
-<img src="https://latex.codecogs.com/gif.latex?P_{bg}=1-exp(\delta T(\ni \cdot A \cdot I_{bg} + f_{bg})) " />
+<img src="https://latex.codecogs.com/gif.latex?P_{bg}=1-exp(\delta/T(\n\cdot/A\cdot/I_{bg}+f_{bg})) " />
 \\wzór
 
 - \delta T - coincidence time [s].
