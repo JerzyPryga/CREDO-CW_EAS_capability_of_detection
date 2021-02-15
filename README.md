@@ -116,11 +116,11 @@ Both of this quantities were analysed and characterised as a function of energy 
 
 To check if the performed analysis was done right another approach to the problem was tested. As muons have been studied for many years, an approximate function for its density on the ground level can be found in the literature. It depends on total number of produced muons which is a function of the energy of primary particle and distance from the centre of the shower. So the parameters that characterise the showers are the same as in analysis described earlier. In this work it was only modified by the scale factor of primary particle zenith angle. Thus, used formula is as follows:
 
-//wzór
+<a href="https://www.codecogs.com/eqnedit.php?latex=\rho(\theta,&space;N_{part},&space;r)&space;=&space;F_{\theta}(\theta)&space;\cdot&space;\frac{1.25&space;N_{part}(E)}{2&space;\pi&space;\Gamma(1.25)}&space;(\frac{1}{320})^{1.25}&space;r^{-0.75}(1&plus;\frac{r}{320})^{-2.5}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\rho(\theta,&space;N_{part},&space;r)&space;=&space;F_{\theta}(\theta)&space;\cdot&space;\frac{1.25&space;N_{part}(E)}{2&space;\pi&space;\Gamma(1.25)}&space;(\frac{1}{320})^{1.25}&space;r^{-0.75}(1&plus;\frac{r}{320})^{-2.5}" title="\rho(\theta, N_{part}, r) = F_{\theta}(\theta) \cdot \frac{1.25 N_{part}(E)}{2 \pi \Gamma(1.25)} (\frac{1}{320})^{1.25} r^{-0.75}(1+\frac{r}{320})^{-2.5}" /></a>
 
 - r - distance to the centre of the shower [m].
 - <a href="https://www.codecogs.com/eqnedit.php?latex=F_{\theta}(\theta)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?F_{\theta}(\theta)" title="F_{\theta}(\theta)" /></a> - This factor scales the density as zenith angle of primary particle approach direction changes (as described in formula []).
-- <a href="https://www.codecogs.com/eqnedit.php?latex=N_{part}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?N_{part}" title="N_{part}" /></a> - Total umber of produced muons as a function of primary particle energy.
+- <a href="https://www.codecogs.com/eqnedit.php?latex=N_{part}(E)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?N_{part}(E)" title="N_{part}(E)" /></a> - Total umber of produced muons as a function of primary particle energy.
 - E - energy of primary particle [TeV].
 
 Further steps in the analysis are the same as previously described. This comparison should help to judge if analysis described earlier, which is more general and gives more information about the behaviour of the system, is reasonable and does not consist any unrealistic assumptions.
