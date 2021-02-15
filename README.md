@@ -46,8 +46,8 @@ Time <a href="https://www.codecogs.com/eqnedit.php?latex=\delta&space;T" target=
 - <a href="https://www.codecogs.com/eqnedit.php?latex=\delta&space;T" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\delta&space;T" title="\delta T" /></a> - coincidence time [s].
 - <a href="https://www.codecogs.com/eqnedit.php?latex=\eta" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\eta" title="\eta" /></a>- detectors efficiency [%].
 - <a href="https://www.codecogs.com/eqnedit.php?latex=A" target="_blank"><img src="https://latex.codecogs.com/gif.latex?A" title="A" /></a> - surface area of the detector [cm^2].
-- <a href="https://www.codecogs.com/eqnedit.php?latex=A" target="_blank"><img src="https://latex.codecogs.com/gif.latex?A" title="I_{bg}" /></a> - background particles flux [1/s cm^2].
-- <a href="https://www.codecogs.com/eqnedit.php?latex=A" target="_blank"><img src="https://latex.codecogs.com/gif.latex?A" title="f_bg}{" /></a> - frequency of non cosmic background signals [1/s].
+- <a href="https://www.codecogs.com/eqnedit.php?latex=I_{bg}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?I_{bg}" title="I_{bg}" /></a> - background particles flux [1/s cm^2].
+- <a href="https://www.codecogs.com/eqnedit.php?latex=f_{bg}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?f_{bg}" title="f_{bg}" /></a> - frequency of non cosmic background signals [1/s].
 
 After calculating this, chance of coincidence signals is computed as well as expected number of such events in the time of measurement. Results of these calculations are presented later in table and are compared with expected number of signals caused by the background.
 
