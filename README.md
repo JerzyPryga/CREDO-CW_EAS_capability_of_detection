@@ -119,7 +119,7 @@ To check if the performed analysis was done right another approach to the proble
 <a href="https://www.codecogs.com/eqnedit.php?latex=\rho(\theta,&space;N_{part},&space;r)&space;=&space;F_{\theta}(\theta)&space;\cdot&space;\frac{1.25&space;N_{part}(E)}{2&space;\pi&space;\Gamma(1.25)}&space;(\frac{1}{320})^{1.25}&space;r^{-0.75}(1&plus;\frac{r}{320})^{-2.5}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\rho(\theta,&space;N_{part},&space;r)&space;=&space;F_{\theta}(\theta)&space;\cdot&space;\frac{1.25&space;N_{part}(E)}{2&space;\pi&space;\Gamma(1.25)}&space;(\frac{1}{320})^{1.25}&space;r^{-0.75}(1&plus;\frac{r}{320})^{-2.5}" title="\rho(\theta, N_{part}, r) = F_{\theta}(\theta) \cdot \frac{1.25 N_{part}(E)}{2 \pi \Gamma(1.25)} (\frac{1}{320})^{1.25} r^{-0.75}(1+\frac{r}{320})^{-2.5}" /></a>
 
 - r - distance to the centre of the shower [m].
-- <a href="https://www.codecogs.com/eqnedit.php?latex=F_{\theta}(\theta)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?F_{\theta}(\theta)" title="F_{\theta}(\theta)" /></a> - This factor scales the density as zenith angle of primary particle approach direction changes (as described in formula []).
+- <a href="https://www.codecogs.com/eqnedit.php?latex=F_{\theta}(\theta)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?F_{\theta}(\theta)" title="F_{\theta}(\theta)" /></a> - This factor scales the density as zenith angle of primary particle approach direction changes (as described in signals from the cascades section).
 - <a href="https://www.codecogs.com/eqnedit.php?latex=N_{part}(E)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?N_{part}(E)" title="N_{part}(E)" /></a> - Total umber of produced muons as a function of primary particle energy.
 - E - energy of primary particle [TeV].
 
@@ -163,6 +163,9 @@ Choice of integration limits:
 In further calculations, only moun component of the EAS has to be taken into account. After carrying all steps of the analysis the final results are as follows:
 
 //tableka
+Attempt | #1 | #2 | #3 | #4 | #5 | #6 | #7 | #8 | #9 | #10 | #11
+--- | --- | --- | --- |--- |--- |--- |--- |--- |--- |--- |---
+Seconds | 301 | 283 | 290 | 286 | 289 | 285 | 287 | 287 | 272 | 276 | 269
 
 ## Conclusions
 
