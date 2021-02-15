@@ -163,9 +163,9 @@ Choice of integration limits:
 In further calculations, only moun component of the EAS has to be taken into account. After carrying all steps of the analysis the final results are as follows:
 
 //tableka
-Attempt | #1 | #2 | #3 | #4 | #5 | #6 | #7 | #8 | #9 | #10 | #11
---- | --- | --- | --- |--- |--- |--- |--- |--- |--- |--- |---
-Seconds | 301 | 283 | 290 | 286 | 289 | 285 | 287 | 287 | 272 | 276 | 269
+#k | #Expected number of coincidences (simpler method) <a href="https://www.codecogs.com/eqnedit.php?latex=\langle&space;N_s(k)&space;\rangle" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\langle&space;N_s(k)&space;\rangle" title="\langle N_s(k) \rangle" /></a> | #Expected number of coincidences (main analysis) <a href="https://www.codecogs.com/eqnedit.php?latex=\langle&space;N(k)&space;\rangle" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\langle&space;N(k)&space;\rangle" title="\langle N(k) \rangle" /></a> | Background events <a href="https://www.codecogs.com/eqnedit.php?latex=\langle&space;N_{bg}(k)&space;\rangle" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\langle&space;N_{bg}(k)&space;\rangle" title="\langle N_{bg}(k) \rangle" /></a> | #Measurement
+--- | --- | --- | --- |---
+1 | 133 500 | 184 300 | 1 168 000 | Not considered
 
 ## Conclusions
 
