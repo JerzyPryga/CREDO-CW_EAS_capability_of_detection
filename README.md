@@ -162,13 +162,19 @@ Choice of integration limits:
 
 In further calculations, only moun component of the EAS has to be taken into account. After carrying all steps of the analysis the final results are as follows:
 
-//tableka
-k | Expected number of coincidences (simpler method) <a href="https://www.codecogs.com/eqnedit.php?latex=\langle&space;N_s(k)&space;\rangle" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\langle&space;N_s(k)&space;\rangle" title="\langle N_s(k) \rangle" /></a> | Expected number of coincidences (main analysis) <a href="https://www.codecogs.com/eqnedit.php?latex=\langle&space;N(k)&space;\rangle" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\langle&space;N(k)&space;\rangle" title="\langle N(k) \rangle" /></a> | Background events <a href="https://www.codecogs.com/eqnedit.php?latex=\langle&space;N_{bg}(k)&space;\rangle" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\langle&space;N_{bg}(k)&space;\rangle" title="\langle N_{bg}(k) \rangle" /></a> | Measurement
+k | Expected number of events <a href="https://www.codecogs.com/eqnedit.php?latex=\langle&space;N_s(k)&space;\rangle" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\langle&space;N_s(k)&space;\rangle" title="\langle N_s(k) \rangle" /></a> (simpler method) | Expected number of events <a href="https://www.codecogs.com/eqnedit.php?latex=\langle&space;N(k)&space;\rangle" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\langle&space;N(k)&space;\rangle" title="\langle N(k) \rangle" /></a> (main analysis) | Background events <a href="https://www.codecogs.com/eqnedit.php?latex=\langle&space;N_{bg}(k)&space;\rangle" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\langle&space;N_{bg}(k)&space;\rangle" title="\langle N_{bg}(k) \rangle" /></a> | Measurement
 --- | --- | --- | --- |---
 1 | 133 500 | 184 300 | 1 168 000 | Not considered
 2 | 0.448 | 0.437 | 0.169 | 94
 3 | 0.00387 | 0.00281 | <a href="https://www.codecogs.com/eqnedit.php?latex=1.01&space;\cdot&space;10^{-8}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?1.01&space;\cdot&space;10^{-8}" title="1.01 \cdot 10^{-8}" /></a> | 2
 4 | 0.000228  | 0.000223 | <a href="https://www.codecogs.com/eqnedit.php?latex=\approx&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\approx&space;0" title="\approx 0" /></a> | 1
+
+k | Expected frequency of events <a href="https://www.codecogs.com/eqnedit.php?latex=\langle&space;f_s(k)&space;\rangle" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\langle&space;f_s(k)&space;\rangle" title="\langle f_s(k) \rangle" /></a> (simpler method) | Expected frequency of events <a href="https://www.codecogs.com/eqnedit.php?latex=\langle&space;f(k)&space;\rangle" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\langle&space;f(k)&space;\rangle" title="\langle f(k) \rangle" /></a> (main analysis) | Background frequency <a href="https://www.codecogs.com/eqnedit.php?latex=\langle&space;f_{bg}(k)&space;\rangle" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\langle&space;f_{bg}(k)&space;\rangle" title="\langle f_{bg}(k) \rangle" /></a> | Measurement
+--- | --- | --- | --- |---
+1 | 13.2 per 1 min | 18.3 per 1 min | 115.9 per 1 min | Not considered
+2 | 1.95 per 1 month | 1.9 per 1 month | 0.74 per 41 days | 409 per 1 month
+3 | 0.2 per 1 year | 0.15 per 1 year | << 1 per 1 year | 104 per 1 year
+4 | << 1 per 1 year | << 1 per 1 year | << 1 per 1 year | 52 per 1 year
 
 ## Conclusions
 
@@ -179,7 +185,7 @@ As one can see, the results of the analysis and measurement differ significantly
 - There are many unclear effects that may have impact on the measurement like productions of particles in the upper parts of building in which it was performed.
 - Background level might be under-evaluated.
 
-However, as predicted the average number of coincidence signals caused by EAS is significantly higher than for the background. Thus, the level of confidence that certain event indicates occurrence of the cascade in a close surrounding of the system should be high. 
+However, as predicted the average number of coincidence signals caused by EAS should be significantly higher than for the background. Thus, the level of confidence that certain event indicates occurrence of the cascade in a close surrounding of the system should be high. Nevertheless, results seem promising as for current state of work.
 
 #### Advantages
 This type of analysis has also another advantage, as it can even give some information about the energy of the primary particle that caused it. It is easy to see when the expected number of events for different number of coincidence signals is plotted over energy spectrum:
