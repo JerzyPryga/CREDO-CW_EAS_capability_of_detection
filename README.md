@@ -92,6 +92,11 @@ must be performed. Formula below shows how it is computed (notice that with assu
 - T - time of measurement [s].
 - \Omega - spherical angle [steradians].
 
+Of course the integration must be performed in certain limits, thus the primary cosmic-rays energy range and maximal distance from the shower must be chosen. Integration up to pi/2 over zenith angle is obvious as it was wassumed that particles from all directions can be detected. Criteria of choice of the maximal distance may be different and in this work two were considered. Namely:
+- R_prc - Radius in which certain percent (in this case 95% was chosen) of particles produced by the cascade are included.
+- R_rho - Radius in which shower particles density is greater than the avereage background.
+Both of this quantities were analysed and characterised as a function of energy of primary particle.
+
 # Comparison with simpler method
 
 To check if the performed analysis was done right another approach to the problem was tested. As muons have been studied for many years, an approximate function for its density on the ground level can be found in the literature. It depends on total number of produced muons which is a function of the energy of primary particle and distance from the center of the shower. So the parameters taht charecterise the showers are the same as in analysis described earlier. In this work it was only modified by the scale factor of primary particle zenith angle. Thus, used formula is as follows:
@@ -119,11 +124,35 @@ The choice of above parameters are not arbitrary. They are the same as in the sy
 - Background particles flux I_bg = 109.96 [1/s cm^2].
 - Frequancy of non cosmic background signals f_bg = 0.1 [1/s] (arbitrary chosen).
 
+Choice of integration limits:
+- Energy range: 1 TeV - 10^5 TeV.
+- Distance from the center: 0 m - R_prc.
+
 In further calculations, only moun component of the EAS has to be taken into account. After carrying all steps of the analysis the final results are as follows:
 
 //tableka
 
+# Conclusions
 
+As one can see, the results of the analysis and measurement differ significantly. It is most likely due to assumptions and simplifications that are still very far from reality, such as:
+- All showers are treated as originating from protons while they make up only obout 74% of primary cosmic-rays.
+- Only muons in the showers are taken into account while it is most likely that electromagnetic component also gives signal.
+- Fluctuations in number of produced particles and their distribution over distance was not yet fully characterised and sometimes an average was taken.
+- There are many unclear effects that may have impact on the measurement like productions of particles in the upper parts of building in which it was performed.
+- Background level might be underevaluated.
+
+However, as predicted the average number of coincidance signals caused by EAS is significantly higher than for the background. Thus, the level of confidence that certain event indicates occurrance of the cascade in a close surrounding of the system should be high. This type of analysis has also another advantage, as it can even give some information about the energy of the primary particle that caused it. It is easy to see when the expected number of events for different number of coincidance signals is plotted over energy spectrum:
+
+//obrazki
+
+Thus, one can approximate the energy of the shower which is a useful information when searching for cosmic-rays ensambles.
 
 
 # Plans for the future
+
+Obviously, there are many way in which this work can be improved and developed. For now the main goal is to include particles other than muons, helium and probably iron nuclei as another primary particles, and to study the distribution of particles whithin the shower with more details.
+
+Another plan is to build our own system of detectors. It would be just like the example presented in the results section. Than, acquired knowladge adn possible tests of behaviour of such system could help to take some more realistic assumptions in the analysis. Also with such tool working, new results of measurement could be constantly compared with computations which could help to improve this work.
+
+Final goal of this mini project is to confirm that such method is a reliable way of detecting EAS.
+
