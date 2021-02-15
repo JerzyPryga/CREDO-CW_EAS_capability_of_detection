@@ -26,7 +26,7 @@ Energy spectrum of currently used simulations:
 Currently used simulations for angle distribution analysis:
 - One fixed energy: 100 TeV,
 - Proton as primary particle,
-- 7 different angles (up to 70 degrees every 10 degrees).
+- 7 different angles (up to <a href="https://www.codecogs.com/eqnedit.php?latex=70^o" target="_blank"><img src="https://latex.codecogs.com/gif.latex?70^o" title="70^o" /></a> with a step of <a href="https://www.codecogs.com/eqnedit.php?latex=10^o" target="_blank"><img src="https://latex.codecogs.com/gif.latex?10^o" title="10^o" /></a>).
 
 Starting point in the analysis is to evaluate flux of background particles, and probability of fake signals i.e. no caused by EAS. In this work, term "background" means uncorrelated, single cosmic-rays which comes from all direction all the time. Also natural radiation and noise from electronics itself my give signals. Taken assumptions are as follows:
 - Only certain types of particles with specific energies gives signal.
