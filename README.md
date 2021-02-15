@@ -176,6 +176,12 @@ k | Expected frequency of events <a href="https://www.codecogs.com/eqnedit.php?l
 3 | 0.2 per 1 year | 0.15 per 1 year | << 1 per 1 year | 104 per 1 year
 4 | << 1 per 1 year | << 1 per 1 year | << 1 per 1 year | 52 per 1 year
 
+k : k' | Ratio events for different k and k' (simpler method) | Ratio events for different k and k' (main analysis) | Background events ratio <a href="https://www.codecogs.com/eqnedit.php?latex=\langle&space;f_{bg}(k)&space;\rangle" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\langle&space;f_{bg}(k)&space;\rangle" title="\langle f_{bg}(k) \rangle" /></a> | Measured ratio
+--- | --- | --- | --- |---
+2 : 3 | 115.8 | 155.5 | 16 730 000 | 47
+2 : 4 | 1 965 | 1 959 | >> 1 000 000 | 94
+3 : 4 | 17 | 12.6 | >> 1 000 000 | 2
+
 ## Conclusions
 
 As one can see, the results of the analysis and measurement differ significantly. It is most likely due to assumptions and simplifications that are still very far from reality, such as:
