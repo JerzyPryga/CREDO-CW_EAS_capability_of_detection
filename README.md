@@ -15,7 +15,7 @@ An ideal of how to detect EAS which just few small devices is very simple. As th
 
 ## Analysis
 
-#### Simulations
+### Simulations
 First step in the analysis is to perform some shower simulations, which are the main source of information about EAS in this work. All simulations was performed using CORSIKA software. Those data is later analysed to find various properties of the cascades that can be described in a quantitative way by mathematical functions.
 
 Energy spectrum of currently used simulations:
@@ -29,7 +29,7 @@ Currently used simulations for angle distribution analysis:
 - Proton as primary particle,
 - 7 different angles (up to <a href="https://www.codecogs.com/eqnedit.php?latex=70^o" target="_blank"><img src="https://latex.codecogs.com/gif.latex?70^o" title="70^o" /></a> with a step of <a href="https://www.codecogs.com/eqnedit.php?latex=10^o" target="_blank"><img src="https://latex.codecogs.com/gif.latex?10^o" title="10^o" /></a>).
 
-#### Background
+### Background
 Starting point in the analysis is to evaluate flux of background particles, and probability of fake signals i.e. no caused by EAS. In this work, term "background" means uncorrelated, single cosmic-rays which comes from all direction all the time. Also natural radiation and noise from electronics itself my give signals. Taken assumptions are as follows:
 - Only certain types of particles with specific energies gives signal.
 - Background flux is known and constant in time.
@@ -62,7 +62,7 @@ Where:
 
 Results of those calculations are presented later in table and are compared with expected number of signals caused by the background.
 
-#### Signals from the cascades
+### Signals from the cascades
 Before starting any fitting or calculations some assumptions about EAS has to be taken. Current list of crucial ones is as follows:
 - Showers are circularly symmetrical.
 - All showers are like produced by protons. 
@@ -127,7 +127,7 @@ Further steps in the analysis are the same as previously described. This compari
 
 ## Current results
 
-#### Parameters
+### Parameters
 Here are presented results of above analysis calculated for exemplary system. Assumed properties of the system are listed below:
 - 4 devices (Cosmic Watches).
 - Time of coincidence:
@@ -193,7 +193,7 @@ As one can see, the results of the analysis and measurement differ significantly
 
 However, as predicted the average number of coincidence signals caused by EAS should be significantly higher than for the background. Thus, the level of confidence that certain event indicates occurrence of the cascade in a close surrounding of the system should be high. Nevertheless, results seem promising as for current state of work.
 
-#### Advantages
+### Advantages
 This type of analysis has also another advantage, as it can even give some information about the energy of the primary particle that caused it. It is easy to see when the expected number of events for different number of coincidence signals is plotted over energy spectrum:
 
 //obrazki
