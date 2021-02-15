@@ -163,9 +163,12 @@ Choice of integration limits:
 In further calculations, only moun component of the EAS has to be taken into account. After carrying all steps of the analysis the final results are as follows:
 
 //tableka
-#k | #Expected number of coincidences (simpler method) <a href="https://www.codecogs.com/eqnedit.php?latex=\langle&space;N_s(k)&space;\rangle" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\langle&space;N_s(k)&space;\rangle" title="\langle N_s(k) \rangle" /></a> | #Expected number of coincidences (main analysis) <a href="https://www.codecogs.com/eqnedit.php?latex=\langle&space;N(k)&space;\rangle" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\langle&space;N(k)&space;\rangle" title="\langle N(k) \rangle" /></a> | Background events <a href="https://www.codecogs.com/eqnedit.php?latex=\langle&space;N_{bg}(k)&space;\rangle" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\langle&space;N_{bg}(k)&space;\rangle" title="\langle N_{bg}(k) \rangle" /></a> | #Measurement
+# k | # Expected number of coincidences (simpler method) <a href="https://www.codecogs.com/eqnedit.php?latex=\langle&space;N_s(k)&space;\rangle" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\langle&space;N_s(k)&space;\rangle" title="\langle N_s(k) \rangle" /></a> | # Expected number of coincidences (main analysis) <a href="https://www.codecogs.com/eqnedit.php?latex=\langle&space;N(k)&space;\rangle" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\langle&space;N(k)&space;\rangle" title="\langle N(k) \rangle" /></a> | # Background events <a href="https://www.codecogs.com/eqnedit.php?latex=\langle&space;N_{bg}(k)&space;\rangle" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\langle&space;N_{bg}(k)&space;\rangle" title="\langle N_{bg}(k) \rangle" /></a> | # Measurement
 --- | --- | --- | --- |---
 1 | 133 500 | 184 300 | 1 168 000 | Not considered
+2 | 0.448 | 0.437 | 0.169 | 94
+3 | 0.00387 | 0.00281 | <a href="https://www.codecogs.com/eqnedit.php?latex=1.01&space;\cdot&space;10^{-8}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?1.01&space;\cdot&space;10^{-8}" title="1.01 \cdot 10^{-8}" /></a> | 2
+4 | 0.000228  | 0.000223 | <a href="https://www.codecogs.com/eqnedit.php?latex=\approx&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\approx&space;0" title="\approx 0" /></a> | 1
 
 ## Conclusions
 
