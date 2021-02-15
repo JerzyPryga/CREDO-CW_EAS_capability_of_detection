@@ -119,7 +119,7 @@ To check if the performed analysis was done right another approach to the proble
 <a href="https://www.codecogs.com/eqnedit.php?latex=\rho(\theta,&space;N_{part},&space;r)&space;=&space;F_{\theta}(\theta)&space;\cdot&space;\frac{1.25&space;N_{part}(E)}{2&space;\pi&space;\Gamma(1.25)}&space;(\frac{1}{320})^{1.25}&space;r^{-0.75}(1&plus;\frac{r}{320})^{-2.5}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\rho(\theta,&space;N_{part},&space;r)&space;=&space;F_{\theta}(\theta)&space;\cdot&space;\frac{1.25&space;N_{part}(E)}{2&space;\pi&space;\Gamma(1.25)}&space;(\frac{1}{320})^{1.25}&space;r^{-0.75}(1&plus;\frac{r}{320})^{-2.5}" title="\rho(\theta, N_{part}, r) = F_{\theta}(\theta) \cdot \frac{1.25 N_{part}(E)}{2 \pi \Gamma(1.25)} (\frac{1}{320})^{1.25} r^{-0.75}(1+\frac{r}{320})^{-2.5}" /></a>
 
 - r - distance to the centre of the shower [m].
-- <a href="https://www.codecogs.com/eqnedit.php?latex=F_{\theta}(\theta)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?F_{\theta}(\theta)" title="F_{\theta}(\theta)" /></a> - This factor scales the density as zenith angle of primary particle approach direction changes (as described in signals from the cascades section).
+- <a href="https://www.codecogs.com/eqnedit.php?latex=F_{\theta}(\theta)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?F_{\theta}(\theta)" title="F_{\theta}(\theta)" /></a> - This factor scales the density as zenith angle of primary particle approach direction changes (as described in ***Signals from the cascades*** section).
 - <a href="https://www.codecogs.com/eqnedit.php?latex=N_{part}(E)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?N_{part}(E)" title="N_{part}(E)" /></a> - Total umber of produced muons as a function of primary particle energy.
 - E - energy of primary particle [TeV].
 
@@ -196,10 +196,19 @@ However, as predicted the average number of coincidence signals caused by EAS sh
 ### Advantages
 This type of analysis has also another advantage, as it can even give some information about the energy of the primary particle that caused it. It is easy to see when the expected number of events for different number of coincidence signals is plotted over energy spectrum:
 
-//obrazki
+![alt text](https://github.com/JerzyPryga/CREDO-CW_EAS_capability_of_detection/blob/main/ResultsCalculationPrograms/N_casc_approx(E)/N_cascApprox_All.png)
+1. For simpler method.
+
+![alt text](https://github.com/JerzyPryga/CREDO-CW_EAS_capability_of_detection/blob/main/ResultsCalculationPrograms/N_casc(E)/N_casc_All.png)
+2. For the main analysis.
+
+Where different colors represent different number of signals:
+- :black_large_square: - k = 1,
+- :red_square: - k = 2,
+- :green_square: - k = 3,
+- :blue_square: - k = 4.
 
 Thus, one can approximate the energy of the shower which is a useful information when searching for cosmic-rays ensembles.
-
 
 # Plans for the future
 
