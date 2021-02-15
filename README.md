@@ -197,10 +197,12 @@ However, as predicted the average number of coincidence signals caused by EAS sh
 This type of analysis has also another advantage, as it can even give some information about the energy of the primary particle that caused it. It is easy to see when the expected number of events for different number of coincidence signals is plotted over energy spectrum:
 
 ![alt text](https://github.com/JerzyPryga/CREDO-CW_EAS_capability_of_detection/blob/main/ResultsCalculationPrograms/N_casc_approx(E)/N_cascApprox_All.png)
-1. For simpler method.
+
+1. For **simpler method.**
 
 ![alt text](https://github.com/JerzyPryga/CREDO-CW_EAS_capability_of_detection/blob/main/ResultsCalculationPrograms/N_casc(E)/N_casc_All.png)
-2. For the main analysis.
+
+2. For the **main analysis**.
 
 Where different colors represent different number of signals:
 - :black_large_square: - k = 1,
