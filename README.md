@@ -1,11 +1,11 @@
 # Analysis of capability of detection of Extensive Air Showers (EAS) using simple scintillator detectors
 This repository contains all files connected to my work at CREDO project. It means programs for analysis and results estimation, plots, all of current results and recent progress etc. Below you will find a brief description of everything that has been done so far. However, for more detailed information or suggestions do not hesitate to contact me directly. It is always a "work in progress" project but I hope that as time goes it will become more developed, more organised and more interesting :).
 
-# Abstract
+## Abstract
 
 One of the main objectives of the CREDO project is to search for so-called Cosmic-Ray Ensembles (CRE). To confirm the existence of such phenomena a massive scale observation of even relatively low energy Extensive Air Showers (EAS) and an analysis of their correlations in time must be performed. To make such observations possible, an infrastructure of widely spread detectors connected in a global network should be developed using low-cost devices capable of collecting data for a long period of time. They should detect even relatively low energy EAS with high reliability and with a time accuracy as high as possible. A candidate for such a network is a system of several Cosmic Watches, small scintillator detectors, connected in a coincidence circuit. Determination of the probability of detection of an EAS is an important part in the analysis of the data collected by a variety of systems. The standard approach based on detailed and extensive simulations is not possible for many systems, thus a faster method is developed. Knowing the characteristics of EAS from more general simulations any required probability is calculated using appropriate parameterisation taking into account EAS spectrum, energy dependence of particle density, zenith angle dependence and many others. This allows to estimate expected number of EAS events measured by a set of small detectors. Comparing these results with number of expected background events one can find if the system can reliably detect EAS.
 
-# Idea and method
+## Idea and method
 
 An ideal of how to detect EAS which just few small devices is very simple. As the cosmic-rays showers manifest themselves (among other effects in the atmosphere that require completely different methods of detection) as increased particles density on the ground that last for a very short period in time. Thus, one can imagine that when there are several detectors placed close to each other and a cascade occurring near such system. At that moment, several devices may detect particles that originate form this exact EAS and give signals at almost the same time. Probability of such situation to be cause by two uncorrelated cosmic rays or other effects should be much smaller so both types of events could be distinguished. It is possible to evaluate expected number of both cascades and background events using current knowledge about EAS as well as simulations of them and information about detectors in such system. This is the exact purpose of this work. Obtained results should be very useful for CREDO project as it will give some information like:
 - How to interpret data gathered by such systems.
@@ -13,8 +13,9 @@ An ideal of how to detect EAS which just few small devices is very simple. As th
 - What are pros and cons of such systems.
 - Some hints how improve the design such systems. 
 
-# Analysis
+## Analysis
 
+###### Simulations
 First step in the analysis is to perform some shower simulations, which are the main source of information about EAS in this work. All simulations was performed using CORSIKA software. Those data is later analysed to find various properties of the cascades that can be described in a quantitative way by mathematical functions.
 
 Energy spectrum of currently used simulations:
@@ -28,6 +29,7 @@ Currently used simulations for angle distribution analysis:
 - Proton as primary particle,
 - 7 different angles (up to <a href="https://www.codecogs.com/eqnedit.php?latex=70^o" target="_blank"><img src="https://latex.codecogs.com/gif.latex?70^o" title="70^o" /></a> with a step of <a href="https://www.codecogs.com/eqnedit.php?latex=10^o" target="_blank"><img src="https://latex.codecogs.com/gif.latex?10^o" title="10^o" /></a>).
 
+###### Background
 Starting point in the analysis is to evaluate flux of background particles, and probability of fake signals i.e. no caused by EAS. In this work, term "background" means uncorrelated, single cosmic-rays which comes from all direction all the time. Also natural radiation and noise from electronics itself my give signals. Taken assumptions are as follows:
 - Only certain types of particles with specific energies gives signal.
 - Background flux is known and constant in time.
@@ -60,6 +62,7 @@ Where:
 
 Results of those calculations are presented later in table and are compared with expected number of signals caused by the background.
 
+###### Signals from the cascades
 Before starting any fitting or calculations some assumptions about EAS has to be taken. Current list of crucial ones is as follows:
 - Showers are circularly symmetrical.
 - All showers are like produced by protons. 
@@ -80,7 +83,7 @@ Final <a href="https://www.codecogs.com/eqnedit.php?latex=\rho" target="_blank">
 
 - <a href="https://www.codecogs.com/eqnedit.php?latex=\rho_{norm}(r)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\rho_{norm}(r)" title="\rho_{norm}(r)" /></a> - The "basis", most important factor. It represents relation between particle density and distance from the centre of the shower. This function is fitted for certain vertical cascade (it is obviously an average from many cascades) of chosen energy to which other factors are normalised. 
 - <a href="https://www.codecogs.com/eqnedit.php?latex=F_E(E,r)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?F_E(E,r)" title="F_E(E,r)" /></a> - This factor scales the density and modifies the "shape" (relation with r) as energy change.
-- <a href="https://www.codecogs.com/eqnedit.php?latex=F_N(N_{part},r)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?F_N(N_{part},r)" title="F_N(N_{part},r)" /></a> - This factor scales the density and modifies the "shape" (relation with r) as total number of produced particles changes. Here, the total number of produced particles is strongly connected with the altitude at which the cascade started to form. However, N_part is a more convenient parameter to work with and you can always imagine "smaller" and "bigger" showers.
+- <a href="https://www.codecogs.com/eqnedit.php?latex=F_N(N_{part},r)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?F_N(N_{part},r)" title="F_N(N_{part},r)" /></a> - This factor scales the density and modifies the "shape" (relation with r) as total number of produced particles changes. Here, the total number of produced particles is strongly connected with the altitude at which the cascade started to form. However, <a href="https://www.codecogs.com/eqnedit.php?latex=N_{part}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?N_{part}" title="N_{part}" /></a> is a more convenient parameter to work with and you can always imagine "smaller" and "bigger" showers.
 - <a href="https://www.codecogs.com/eqnedit.php?latex=F_{\theta}(\theta)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?F_{\theta}(\theta)" title="F_{\theta}(\theta)" /></a> - This factor scales the density as zenith angle of primary particle approach direction changes. Here a simplification was made. Namely, the shape of shower footprint is not circularly symmetrical as this angle increase. However, EAS comes from all directions with equal probability and number of cascades that should occur in the time of measurement is huge. Thus, neglecting this effect is perfectly justified.
 
 Next step is to calculate probability of a signal to happen when there is a cascade near the detector. Assumptions about detectors are the same as described earlier. Formula for single signal probability is as follows:
@@ -109,21 +112,22 @@ Of course the integration must be performed in certain limits, thus the primary 
 - <a href="https://www.codecogs.com/eqnedit.php?latex=R_{rho}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?R_{rho}" title="R_{rho}" /></a> - Radius in which shower particles density is greater than the avereage background.
 Both of this quantities were analysed and characterised as a function of energy of primary particle.
 
-# Comparison with simpler method
+## Comparison with simpler method
 
 To check if the performed analysis was done right another approach to the problem was tested. As muons have been studied for many years, an approximate function for its density on the ground level can be found in the literature. It depends on total number of produced muons which is a function of the energy of primary particle and distance from the centre of the shower. So the parameters that characterise the showers are the same as in analysis described earlier. In this work it was only modified by the scale factor of primary particle zenith angle. Thus, used formula is as follows:
 
 //wzór
 
 - r - distance to the centre of the shower [m].
-- F(\theta) - This factor scales the density as zenith angle of primary particle approach direction changes (as described in formula []).
-- N_part - Total umber of produced muons as a function of primary particle energy.
+- <a href="https://www.codecogs.com/eqnedit.php?latex=F_{\theta}(\theta)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?F_{\theta}(\theta)" title="F_{\theta}(\theta)" /></a> - This factor scales the density as zenith angle of primary particle approach direction changes (as described in formula []).
+- <a href="https://www.codecogs.com/eqnedit.php?latex=N_{part}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?N_{part}" title="N_{part}" /></a> - Total umber of produced muons as a function of primary particle energy.
 - E - energy of primary particle [TeV].
 
 Further steps in the analysis are the same as previously described. This comparison should help to judge if analysis described earlier, which is more general and gives more information about the behaviour of the system, is reasonable and does not consist any unrealistic assumptions.
 
-# Current results
+## Current results
 
+###### Parameters
 Here are presented results of above analysis calculated for exemplary system. Assumed properties of the system are listed below:
 - 4 devices (Cosmic Watches).
 - Time of coincidence \delta T = 200 ns.
@@ -135,7 +139,8 @@ Here are presented results of above analysis calculated for exemplary system. As
 The choice of above parameters are not arbitrary. They are the same as in the system tested by prof. Tadeusz Wibig in his work (only efficiency was arbitrary chosen), however there is no certainty about which particles gives signal in the detector. However, according to information given by designers of Cosmic Watch detector it should be muons. These assumptions and choice of parameters yield one of the following properties of the background:
 - Background particles flux:
 <a href="https://www.codecogs.com/eqnedit.php?latex=I_{bg}&space;=&space;109.96\&space;[\frac{1}{m^2s}]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?I_{bg}&space;=&space;109.96\&space;[\frac{1}{m^2s}]" title="I_{bg} = 109.96\ [\frac{1}{m^2s}]" /></a>.
-- Frequency of non cosmic background signals <a href="https://www.codecogs.com/eqnedit.php?latex=f_{bg}&space;=&space;0.1\&space;[\frac{1}{s}]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?f_{bg}&space;=&space;0.1\&space;[\frac{1}{s}]" title="f_{bg} = 0.1\ [\frac{1}{s}]" /></a> (arbitrary chosen).
+- Frequency of non cosmic background signals:
+<a href="https://www.codecogs.com/eqnedit.php?latex=f_{bg}&space;=&space;0.1\&space;[\frac{1}{s}]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?f_{bg}&space;=&space;0.1\&space;[\frac{1}{s}]" title="f_{bg} = 0.1\ [\frac{1}{s}]" /></a> (arbitrary chosen).
 
 Choice of integration limits:
 - Energy range: 1 TeV - 10^5 TeV.
@@ -145,7 +150,7 @@ In further calculations, only moun component of the EAS has to be taken into acc
 
 //tableka
 
-# Conclusions
+## Conclusions
 
 As one can see, the results of the analysis and measurement differ significantly. It is most likely due to assumptions and simplifications that are still very far from reality, such as:
 - All showers are treated as originating from protons while they make up only about 74% of primary cosmic-rays.
@@ -154,7 +159,10 @@ As one can see, the results of the analysis and measurement differ significantly
 - There are many unclear effects that may have impact on the measurement like productions of particles in the upper parts of building in which it was performed.
 - Background level might be under-evaluated.
 
-However, as predicted the average number of coincidence signals caused by EAS is significantly higher than for the background. Thus, the level of confidence that certain event indicates occurrence of the cascade in a close surrounding of the system should be high. This type of analysis has also another advantage, as it can even give some information about the energy of the primary particle that caused it. It is easy to see when the expected number of events for different number of coincidence signals is plotted over energy spectrum:
+However, as predicted the average number of coincidence signals caused by EAS is significantly higher than for the background. Thus, the level of confidence that certain event indicates occurrence of the cascade in a close surrounding of the system should be high. 
+
+###### Advantages
+This type of analysis has also another advantage, as it can even give some information about the energy of the primary particle that caused it. It is easy to see when the expected number of events for different number of coincidence signals is plotted over energy spectrum:
 
 //obrazki
 
